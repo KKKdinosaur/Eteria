@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+# Writing corrected HTML file to /mnt/data/etheria_module_guide (2).html
+html = r"""<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>에테리아 모듈 판매 체크</title>
+    <title>에테리아 모듈 판매 체크 (수정본)</title>
     <style>
         * {
             margin: 0;
@@ -560,27 +561,138 @@
         ];
 
         const goodStats = {
-            '공세': { sub: ['깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중'] },
-            '원천': { sub: ['깡체', 'HP%', '속도', '효과 명중', '효과 저항'] },
-            '강철': { sub: ['방어력%', '속도', 'HP%', '효과 명중'] },
-            '질주': { sub: ['속도', 'HP%', '효과 명중', '방어력%'] },
-            '수호': { sub: ['방어력%', 'HP%', '효과 저항', '속도'] },
-            '전의': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도'] },
-            '쐐기': { sub: ['속도', 'HP%', '방어력%', '효과 명중'] },
-            '치유': { sub: ['HP%', '속도', '방어력%'] },
-            '진격': { sub: ['속도', 'HP%', '방어력%'] },
-            '처단': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도'] },
-            '광폭': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도', 'HP%'] },
-            '기세 추격': { sub: ['치명타 확률', '치명타 피해', '공격력%', '효과 명중', '속도'] },
-            '유혈 사태': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도'] },
-            '시공 지배': { sub: ['속도', 'HP%', '효과 명중'] },
-            '통찰': { sub: ['치명타 확률', '치명타 피해', '공격력%', '속도', 'HP%'] },
-            '폭렬 칼날': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도'] },
-            '역병': { sub: ['효과 명중', '속도', 'HP%'] },
-            '철벽': { sub: ['방어력%', 'HP%', '효과 저항', '속도'] },
-            '급습 공격': { sub: ['속도', '공격력%', '치명타 확률'] },
-            '섬광 타격': { sub: ['속도', 'HP%', '효과 명중'] },
-            '진화 보호': { sub: ['HP%', '방어력%', '속도'] }
+            '공세': {
+                '마스크': ['공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
+                '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                '반지': ['깡공', '속도', '치명타 확률', '효과 명중'],
+                '코어': ['깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중']
+            },
+            '원천': {
+                '마스크': ['깡체', '속도', '효과 명중'],
+                '트랜지스터': ['HP%', '속도', '효과 저항'],
+                '반지': ['깡체', '속도', '효과 명중', '효과 저항'],
+                '코어': {
+                    'HP%': ['깡체', '방어력%', '속도', '효과 명중', '효과 저항'],
+                    '방어력%': ['깡체', 'HP%', '속도', '효과 명중', '효과 저항'],
+                    '효과 명중': ['깡체', 'HP%', '방어력%', '속도', '효과 저항'],
+                    '효과 저항': ['깡체', 'HP%', '방어력%', '속도', '효과 명중'],
+                    'default': ['깡체', 'HP%', '방어력%', '속도', '효과 명중', '효과 저항']
+                }
+            },
+            '강철': {
+                '마스크': ['깡체', '속도', '효과 명중'],
+                '트랜지스터': ['HP%', '속도'],
+                '반지': ['깡체', '방어력%', '속도', '효과 명중'],
+                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중']
+            },
+            '질주': {
+                '마스크': ['깡체', '속도', '효과 명중'],
+                '트랜지스터': ['HP%', '속도'],
+                '반지': ['깡체', '속도', '효과 명중'],
+                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중']
+            },
+            '수호': {
+                '마스크': ['깡체', '속도', '효과 명중'],
+                '트랜지스터': ['HP%', '속도', '효과 저항'],
+                '반지': ['깡체', '방어력%', '속도', '효과 저항'],
+                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 저항']
+            },
+            '전의': {
+                '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
+                '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                '반지': ['깡체', '깡공', '속도', '치명타 확률'],
+                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+            },
+            '쐐기': {
+                '마스크': ['깡체', '속도', '효과 명중'],
+                '트랜지스터': ['HP%', '속도'],
+                '반지': ['깡체', '방어력%', '속도', '효과 명중'],
+                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중']
+            },
+            '치유': {
+                '마스크': ['깡체', '속도'],
+                '트랜지스터': ['HP%', '속도'],
+                '반지': ['깡체', '방어력%', '속도'],
+                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도']
+            },
+            '진격': {
+                '마스크': ['깡체', '속도'],
+                '트랜지스터': ['HP%', '속도'],
+                '반지': ['깡체', '방어력%', '속도'],
+                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도']
+            },
+            '처단': {
+                '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
+                '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                '반지': ['깡체', '깡공', '속도', '치명타 확률'],
+                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+            },
+            '광폭': {
+                '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
+                '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                '반지': ['깡체', '깡공', '속도', '치명타 확률'],
+                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+            },
+            '기세 추격': {
+                '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
+                '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                '반지': ['깡체', '깡공', '속도', '치명타 확률', '효과 명중'],
+                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중']
+            },
+            '유혈 사태': {
+                '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
+                '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                '반지': ['깡체', '깡공', '속도', '치명타 확률'],
+                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+            },
+            '시공 지배': {
+                '마스크': ['깡체', '속도', '효과 명중'],
+                '트랜지스터': ['HP%', '속도'],
+                '반지': ['깡체', '속도', '효과 명중'],
+                '코어': ['깡체', 'HP%', '속도', '효과 명중']
+            },
+            '통찰': {
+                '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
+                '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                '반지': ['깡체', '깡공', '속도', '치명타 확률'],
+                '코어': ['깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+            },
+            '폭렬 칼날': {
+                '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '효과 명중'],
+                '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률'],
+                '반지': ['깡체', '깡공', '속도', '치명타 확률', '효과 명중'],
+                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '효과 명중']
+            },
+            '역병': {
+                '마스크': ['깡체', '속도', '효과 명중'],
+                '트랜지스터': ['HP%', '속도'],
+                '반지': ['깡체', '속도', '효과 명중'],
+                '코어': ['깡체', 'HP%', '속도', '효과 명중']
+            },
+            '철벽': {
+                '마스크': ['깡체', '속도'],
+                '트랜지스터': ['HP%', '속도', '효과 저항'],
+                '반지': ['깡체', '방어력%', '속도', '효과 저항'],
+                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 저항']
+            },
+            '급습 공격': {
+                '마스크': ['깡체', '공격력%', '속도', '치명타 확률'],
+                '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률'],
+                '반지': ['깡체', '깡공', '속도', '치명타 확률'],
+                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률']
+            },
+            '섬광 타격': {
+                '마스크': ['깡체', '속도', '효과 명중'],
+                '트랜지스터': ['HP%', '속도'],
+                '반지': ['깡체', '속도', '효과 명중'],
+                '코어': ['깡체', 'HP%', '속도', '효과 명중']
+            },
+            '진화 보호': {
+                '마스크': ['깡체', '속도'],
+                '트랜지스터': ['HP%', '속도'],
+                '반지': ['깡체', '방어력%', '속도'],
+                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도']
+            }
         };
 
         let modules = [];
@@ -590,7 +702,7 @@
         function addModule() {
             const module = {
                 id: nextId++,
-                set: '통찰',
+                set: '공세',
                 slot: '마스크',
                 mainStat: '깡공',
                 matrix: 2,
@@ -696,25 +808,62 @@
             }
         }
 
+        // ====== evaluateModule (수정된 버전) ======
         function evaluateModule(module) {
             const selectedStats = Object.keys(module.substats).filter(s => module.substats[s]);
-            const good = goodStats[module.set]?.sub || [];
-            const currentSet = sets.find(s => s.name === module.set);
-            
-            const goodCount = selectedStats.filter(s => good.includes(s)).length;
             const totalCount = selectedStats.length;
-            
+
             if (totalCount === 0) {
                 return { status: 'empty', text: '옵션 미선택' };
             }
-            
+
             if (module.substatCount < 3) {
                 return { status: 'sell', text: '판매 (능력치 부족)' };
             }
-            
+
+            const currentSet = sets.find(s => s.name === module.set);
+            // good 목록을 슬롯 기준으로 가져오기 (코어는 주스텟 고려)
+            let goodStatsForSlot = goodStats[module.set]?.[module.slot];
+            let good = [];
+
+            if (module.slot === '코어' && typeof goodStatsForSlot === 'object' && !Array.isArray(goodStatsForSlot)) {
+                // 코어인 경우 주스텟별로 매핑된 객체일 수 있음
+                good = goodStatsForSlot[module.mainStat] || goodStatsForSlot['default'] || [];
+            } else {
+                good = goodStatsForSlot || [];
+            }
+
+            // 코어 주스텟 유효성 체크: 주스텟 자체가 해당 세트에서 유효한 주스텟인지 확인
+            if (module.slot === '코어') {
+                const allGoodStats = Array.isArray(goodStatsForSlot) ? goodStatsForSlot : (goodStatsForSlot?.['default'] || []);
+                let mainStatValid = false;
+                for (let stat of allGoodStats) {
+                    if (module.mainStat === '공격력%' && (stat === '공격력%' || stat === '깡공')) { mainStatValid = true; break; }
+                    if (module.mainStat === 'HP%' && (stat === 'HP%' || stat === '깡체')) { mainStatValid = true; break; }
+                    if (module.mainStat === '방어력%' && (stat === '방어력%' || stat === '깡방')) { mainStatValid = true; break; }
+                    if (stat === module.mainStat) { mainStatValid = true; break; }
+                }
+                if (!mainStatValid) {
+                    // 주스텟이 유효하지 않으면 부옵 전부 비유효 처리
+                    good = [];
+                } else {
+                    // 주스텟이 유효하면 주스텟과 동일한 항목은 제외
+                    good = good.filter(stat => {
+                        if (module.mainStat === '공격력%' && stat === '공격력%') return false;
+                        if (module.mainStat === 'HP%' && stat === 'HP%') return false;
+                        if (module.mainStat === '방어력%' && stat === '방어력%') return false;
+                        return stat !== module.mainStat;
+                    });
+                }
+            }
+
+            // goodCount 계산
+            const goodCount = selectedStats.filter(s => good.includes(s)).length;
+
+            // 평가 로직 (원래 알고리즘 유지)
             if (currentSet.type === 12) {
                 const isException = ['질주', '유혈 사태', '기세 추격'].includes(module.set);
-                
+
                 if (module.matrix === 3) {
                     if (module.substatCount === 4) {
                         if (goodCount >= 3) return { status: 'keep', text: '보관 (메인)' };
@@ -725,7 +874,7 @@
                     return { status: 'sell', text: '판매' };
                 } else if (module.matrix === 2) {
                     if (!isException) return { status: 'sell', text: '판매 (매트릭스 낮음)' };
-                    
+
                     if (module.substatCount === 4) {
                         if (goodCount >= 3) return { status: 'keep', text: '보관 (서브)' };
                         return { status: 'sell', text: '판매' };
@@ -735,7 +884,7 @@
                     return { status: 'sell', text: '판매' };
                 }
             }
-            
+
             if (currentSet.type === 8) {
                 if (module.matrix === 3) {
                     if (module.substatCount === 4) {
@@ -755,9 +904,10 @@
                     return { status: 'sell', text: '판매' };
                 }
             }
-            
+
             return { status: 'sell', text: '판매 추천' };
         }
+        // ====== evaluateModule end ======
 
         function renderModules() {
             const container = document.getElementById('modules-container');
@@ -769,7 +919,42 @@
             
             container.innerHTML = modules.map(module => {
                 const evaluation = evaluateModule(module);
-                const good = goodStats[module.set]?.sub || [];
+                let goodStatsForSlot = goodStats[module.set]?.[module.slot];
+                
+                // 코어이고 주 스텟별 유효 옵션이 있는 경우
+                let good = [];
+                if (module.slot === '코어' && typeof goodStatsForSlot === 'object' && !Array.isArray(goodStatsForSlot)) {
+                    good = goodStatsForSlot[module.mainStat] || goodStatsForSlot['default'] || [];
+                } else {
+                    good = goodStatsForSlot || [];
+                }
+                
+                // 코어인 경우 주 스텟 체크
+                if (module.slot === '코어') {
+                    const allGoodStats = Array.isArray(goodStatsForSlot) ? goodStatsForSlot : (goodStatsForSlot?.['default'] || []);
+                    
+                    // 주 스텟이 유효 옵션이 아니면 부옵션 전부 비유효 처리
+                    const mainStatValid = allGoodStats.some(stat => {
+                        if (module.mainStat === '공격력%' && (stat === '공격력%' || stat === '깡공')) return true;
+                        if (module.mainStat === 'HP%' && (stat === 'HP%' || stat === '깡체')) return true;
+                        if (module.mainStat === '방어력%' && (stat === '방어력%' || stat === '깡방')) return true;
+                        return stat === module.mainStat;
+                    });
+                    
+                    if (!mainStatValid) {
+                        // 주 스텟이 비유효면 부옵션 전부 비유효
+                        good = [];
+                    } else {
+                        // 주 스텟이 유효하면 주 스텟과 같은 것만 제외
+                        good = good.filter(stat => {
+                            if (module.mainStat === '공격력%' && stat === '공격력%') return false;
+                            if (module.mainStat === 'HP%' && stat === 'HP%') return false;
+                            if (module.mainStat === '방어력%' && stat === '방어력%') return false;
+                            return stat !== module.mainStat;
+                        });
+                    }
+                }
+                
                 const selectedCount = Object.values(module.substats).filter(v => v).length;
                 const currentSet = sets.find(s => s.name === module.set);
                 
@@ -891,3 +1076,11 @@
     </script>
 </body>
 </html>
+"""
+
+path = "/mnt/data/etheria_module_guide (2).html"
+with open(path, "w", encoding="utf-8") as f:
+    f.write(html)
+
+print(f"Wrote corrected HTML to: {path}")
+
