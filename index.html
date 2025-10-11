@@ -13,9 +13,10 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f5f7fa;
+            background: #fafafa;
             padding: 20px;
             line-height: 1.5;
+            color: #333;
         }
         
         .container {
@@ -26,9 +27,9 @@
         header {
             background: white;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 4px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         
         h1 {
@@ -38,35 +39,34 @@
         }
         
         .add-btn {
-            background: #3498db;
+            background: #2196F3;
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
+            padding: 10px 20px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 0.95em;
+            font-size: 0.9em;
             font-weight: 500;
             margin-bottom: 20px;
-            transition: background 0.2s;
         }
         
         .add-btn:hover {
-            background: #2980b9;
+            background: #1976D2;
         }
         
         .module-card {
             background: white;
-            border-radius: 8px;
+            border-radius: 4px;
             padding: 20px;
             margin-bottom: 15px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border-left: 4px solid #e0e0e0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            border-left: 3px solid #e0e0e0;
         }
         
-        .module-card.keep { border-left-color: #27ae60; }
-        .module-card.good { border-left-color: #3498db; }
-        .module-card.sell { border-left-color: #e74c3c; }
-        .module-card.empty { border-left-color: #95a5a6; }
+        .module-card.keep { border-left-color: #4CAF50; }
+        .module-card.good { border-left-color: #2196F3; }
+        .module-card.sell { border-left-color: #f44336; }
+        .module-card.empty { border-left-color: #9E9E9E; }
         
         .module-header {
             display: flex;
@@ -91,16 +91,32 @@
 
         .set-search-input {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 8px 12px 8px 32px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
             font-size: 0.9em;
-            height: 38px;
+            height: 36px;
+        }
+
+        .set-search-wrapper {
+            position: relative;
+            min-width: 160px;
+        }
+
+        .set-color-box {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            pointer-events: none;
         }
 
         .set-search-input:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #2196F3;
         }
 
         .set-dropdown {
@@ -109,12 +125,12 @@
             left: 0;
             right: 0;
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
             margin-top: 4px;
             max-height: 300px;
             overflow-y: auto;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             z-index: 1000;
             display: none;
         }
@@ -126,71 +142,76 @@
         .set-dropdown-item {
             padding: 10px 12px;
             cursor: pointer;
-            transition: background 0.15s;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .set-dropdown-item:hover {
-            background: #f8f9fa;
+            background: #f5f5f5;
         }
 
         .set-dropdown-item.selected {
-            background: #e3f2fd;
+            background: #E3F2FD;
+        }
+
+        .set-color-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            flex-shrink: 0;
         }
         
         select {
             padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
             background: white;
             font-size: 0.9em;
             cursor: pointer;
-            height: 38px;
+            height: 36px;
             min-width: 70px;
         }
         
         .status-badge {
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: 600;
         }
         
         .status-badge.keep {
-            background: #d5f4e6;
-            color: #27ae60;
+            background: #E8F5E9;
+            color: #2E7D32;
         }
         
         .status-badge.good {
-            background: #d6eaf8;
-            color: #3498db;
+            background: #E3F2FD;
+            color: #1565C0;
         }
         
         .status-badge.sell {
-            background: #fadbd8;
-            color: #e74c3c;
+            background: #FFEBEE;
+            color: #C62828;
         }
         
         .status-badge.empty {
-            background: #ecf0f1;
-            color: #95a5a6;
+            background: #F5F5F5;
+            color: #616161;
         }
         
         .remove-btn {
-            background: transparent;
-            color: #e74c3c;
-            border: 1px solid #e74c3c;
-            padding: 6px 14px;
-            border-radius: 4px;
+            background: white;
+            color: #f44336;
+            border: 1px solid #f44336;
+            padding: 6px 12px;
+            border-radius: 3px;
             cursor: pointer;
             font-size: 0.85em;
-            transition: all 0.2s;
         }
         
         .remove-btn:hover {
-            background: #e74c3c;
+            background: #f44336;
             color: white;
         }
         
@@ -201,39 +222,38 @@
         }
         
         .substat-btn {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
             cursor: pointer;
             text-align: center;
             font-size: 0.85em;
-            transition: all 0.15s;
             background: white;
         }
         
         .substat-btn.good {
-            border-color: #27ae60;
-            background: #f0fdf4;
+            border-color: #4CAF50;
+            background: #F1F8E9;
         }
         
         .substat-btn.good:hover {
-            background: #d1fae5;
+            background: #DCEDC8;
         }
         
         .substat-btn.good.selected {
-            background: #27ae60;
+            background: #4CAF50;
             color: white;
-            border-color: #27ae60;
+            border-color: #4CAF50;
         }
         
         .substat-btn.bad:hover {
-            background: #f8f9fa;
+            background: #f5f5f5;
         }
         
         .substat-btn.bad.selected {
-            background: #6c757d;
+            background: #757575;
             color: white;
-            border-color: #6c757d;
+            border-color: #757575;
         }
         
         .substat-btn:disabled {
@@ -336,12 +356,14 @@
         }
 
         .main-stat-info {
-            background: #f8f9fa;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            color: #495057;
-            margin-bottom: 12px;
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 1em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            border-left: 3px solid #2196F3;
         }
     </style>
 </head>
@@ -425,7 +447,7 @@
                                 속도
                             </div>
                         </td>
-                        <td>2-4</td>
+                        <td>2+</td>
                         <td>18 (24*)</td>
                     </tr>
                     <tr>
@@ -479,8 +501,13 @@
         <div class="guide">
             <h3>사용 가이드</h3>
             <div class="guide-item">• <strong>부가 능력치 2개 이하:</strong> 무조건 판매</div>
-            <div class="guide-item">• <strong>부가 능력치 3개:</strong> 좋은 옵션 2개 이상이면 보관</div>
-            <div class="guide-item">• <strong>부가 능력치 4개:</strong> 좋은 옵션 3개 이상이면 보관</div>
+            <div class="guide-item">• <strong>부가 능력치 3개:</strong> 좋은 옵션 3개면 보관, 나머지 판매</div>
+            <div class="guide-item">• <strong>부가 능력치 4개:</strong> 좋은 옵션 3개 이상이면 보관, 나머지 판매</div>
+            <div class="guide-item">• <strong>12피스 세트:</strong></div>
+            <div class="guide-item" style="padding-left: 20px;">- 매트릭스 2는 질주/유혈 사태/기세 추격만 보관 (나머지 판매)</div>
+            <div class="guide-item" style="padding-left: 20px;">- 매트릭스 3는 모두 유효</div>
+            <div class="guide-item">• <strong>8피스 세트:</strong></div>
+            <div class="guide-item" style="padding-left: 20px;">- 매트릭스 2, 3 모두 유효</div>
             <div class="guide-item">• <strong>왼쪽 장비:</strong> 부위별로 나올 수 있는 부옵션이 제한됨</div>
             <div class="guide-item">• <strong>오른쪽 장비(코어):</strong> 모든 부옵션 가능 (주옵과 동일 스텟 제외)</div>
         </div>
@@ -488,27 +515,27 @@
 
     <script>
         const sets = [
-            { name: '공세', icon: '🔥', type: 12 },
-            { name: '원천', icon: '💧', type: 12 },
-            { name: '강철', icon: '🛡️', type: 12 },
-            { name: '질주', icon: '💨', type: 12 },
-            { name: '수호', icon: '💎', type: 12 },
-            { name: '전의', icon: '⚡', type: 12 },
-            { name: '쐐기', icon: '⚠️', type: 8 },
-            { name: '치유', icon: '🍃', type: 8 },
-            { name: '진격', icon: '🔷', type: 8 },
-            { name: '처단', icon: '🔴', type: 8 },
-            { name: '광폭', icon: '💥', type: 8 },
-            { name: '기세 추격', icon: '👁️', type: 12 },
-            { name: '유혈 사태', icon: '🩸', type: 8 },
-            { name: '시공 지배', icon: '🦋', type: 12 },
-            { name: '통찰', icon: '💠', type: 12 },
-            { name: '폭렬 칼날', icon: '⚔️', type: 8 },
-            { name: '역병', icon: '☠️', type: 8 },
-            { name: '철벽', icon: '⚙️', type: 8 },
-            { name: '급습 공격', icon: '🌀', type: 8 },
-            { name: '섬광 타격', icon: '🎯', type: 8 },
-            { name: '진화 보호', icon: '🔰', type: 8 }
+            { name: '공세', type: 12, effect: 'ATK +45%', color: '#f44336' },
+            { name: '원천', type: 12, effect: 'HP +45%', color: '#4CAF50' },
+            { name: '강철', type: 12, effect: 'DEF +45%', color: '#FFC107' },
+            { name: '질주', type: 12, effect: 'SPD +35%', color: '#2196F3' },
+            { name: '수호', type: 12, effect: 'Effect RES +18% + DMG감소 55%', color: '#2196F3' },
+            { name: '전의', type: 12, effect: 'CRIT Rate +12% + 디버프당 DMG +6%', color: '#9C27B0' },
+            { name: '쐐기', type: 8, effect: 'DEF +10% + 반격 25%', color: '#FFC107' },
+            { name: '치유', type: 8, effect: 'HP +10% + 치유효과 +25%', color: '#4CAF50' },
+            { name: '진격', type: 8, effect: 'HP +10% + 면역 1턴', color: '#2196F3' },
+            { name: '처단', type: 8, effect: 'ATK +10% + HP 50%이상 방무 30%', color: '#f44336' },
+            { name: '광폭', type: 8, effect: 'ATK +10% + 크리시 DMG +12%', color: '#f44336' },
+            { name: '기세 추격', type: 12, effect: 'Effect ACC +18% + 스킬CD -1 (35%)', color: '#f44336' },
+            { name: '유혈 사태', type: 8, effect: 'ATK +10% + 추격 20%', color: '#FFC107' },
+            { name: '시공 지배', type: 12, effect: 'CRIT DMG +18% + 첫3타 DMG증가', color: '#2196F3' },
+            { name: '통찰', type: 12, effect: 'CRIT Rate +12%, CRIT DMG +20%', color: '#f44336' },
+            { name: '폭렬 칼날', type: 8, effect: 'SPD +15%, Effect ACC +20%', color: '#f44336' },
+            { name: '역병', type: 8, effect: 'HP +25%, Effect ACC +20%', color: '#9C27B0' },
+            { name: '철벽', type: 8, effect: 'DEF +25%, Effect RES +20%', color: '#FFC107' },
+            { name: '급습 공격', type: 8, effect: 'SPD +15%, ATK +20%', color: '#2196F3' },
+            { name: '섬광 타격', type: 8, effect: 'DEF +10% + 피격시 턴미터 +10%', color: '#9C27B0' },
+            { name: '진화 보호', type: 8, effect: 'Healing +12%, Effect RES +20%', color: '#4CAF50' }
         ];
 
         const slots = ['마스크', '트랜지스터', '반지', '코어'];
@@ -534,7 +561,7 @@
 
         const goodStats = {
             '공세': { sub: ['깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중'] },
-            '원천': { sub: ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중', '효과 저항'] },
+            '원천': { sub: ['깡체', 'HP%', '속도', '효과 명중', '효과 저항'] },
             '강철': { sub: ['방어력%', '속도', 'HP%', '효과 명중'] },
             '질주': { sub: ['속도', 'HP%', '효과 명중', '방어력%'] },
             '수호': { sub: ['방어력%', 'HP%', '효과 저항', '속도'] },
@@ -690,50 +717,42 @@
                 
                 if (module.matrix === 3) {
                     if (module.substatCount === 4) {
-                        if (goodCount >= 3) return { status: 'keep', text: '보관 필수 (메인)' };
-                        if (goodCount >= 2) return { status: 'good', text: '보관 권장 (메인)' };
-                        return { status: 'sell', text: '판매 추천' };
+                        if (goodCount >= 3) return { status: 'keep', text: '보관 (메인)' };
+                        return { status: 'sell', text: '판매' };
                     }
                     // 부가 능력치 3개
-                    if (goodCount === 3) return { status: 'keep', text: '보관 필수 (메인)' };
-                    if (goodCount >= 2) return { status: 'good', text: '보관 권장 (메인)' };
-                    return { status: 'sell', text: '판매 추천' };
+                    if (goodCount === 3) return { status: 'keep', text: '보관 (메인)' };
+                    return { status: 'sell', text: '판매' };
                 } else if (module.matrix === 2) {
                     if (!isException) return { status: 'sell', text: '판매 (매트릭스 낮음)' };
                     
                     if (module.substatCount === 4) {
-                        if (goodCount >= 3) return { status: 'keep', text: '보관 필수 (서브)' };
-                        if (goodCount >= 2) return { status: 'good', text: '보관 권장 (서브)' };
-                        return { status: 'sell', text: '판매 (서브용 부족)' };
+                        if (goodCount >= 3) return { status: 'keep', text: '보관 (서브)' };
+                        return { status: 'sell', text: '판매' };
                     }
                     // 부가 능력치 3개
-                    if (goodCount === 3) return { status: 'keep', text: '보관 필수 (서브)' };
-                    if (goodCount >= 2) return { status: 'good', text: '보관 권장 (서브)' };
-                    return { status: 'sell', text: '판매 (서브용 부족)' };
+                    if (goodCount === 3) return { status: 'keep', text: '보관 (서브)' };
+                    return { status: 'sell', text: '판매' };
                 }
             }
             
             if (currentSet.type === 8) {
                 if (module.matrix === 3) {
                     if (module.substatCount === 4) {
-                        if (goodCount >= 3) return { status: 'keep', text: '보관 필수 (메인)' };
-                        if (goodCount >= 2) return { status: 'good', text: '보관 권장 (메인)' };
-                        return { status: 'sell', text: '판매 추천' };
+                        if (goodCount >= 3) return { status: 'keep', text: '보관 (메인)' };
+                        return { status: 'sell', text: '판매' };
                     }
                     // 부가 능력치 3개
-                    if (goodCount === 3) return { status: 'keep', text: '보관 필수 (메인)' };
-                    if (goodCount >= 2) return { status: 'good', text: '보관 권장 (메인)' };
-                    return { status: 'sell', text: '판매 추천' };
+                    if (goodCount === 3) return { status: 'keep', text: '보관 (메인)' };
+                    return { status: 'sell', text: '판매' };
                 } else if (module.matrix === 2) {
                     if (module.substatCount === 4) {
-                        if (goodCount >= 3) return { status: 'keep', text: '보관 필수 (서브)' };
-                        if (goodCount >= 2) return { status: 'good', text: '보관 권장 (서브)' };
-                        return { status: 'sell', text: '판매 (서브용 부족)' };
+                        if (goodCount >= 3) return { status: 'keep', text: '보관 (서브)' };
+                        return { status: 'sell', text: '판매' };
                     }
                     // 부가 능력치 3개
-                    if (goodCount === 3) return { status: 'keep', text: '보관 필수 (서브)' };
-                    if (goodCount >= 2) return { status: 'good', text: '보관 권장 (서브)' };
-                    return { status: 'sell', text: '판매 (서브용 부족)' };
+                    if (goodCount === 3) return { status: 'keep', text: '보관 (서브)' };
+                    return { status: 'sell', text: '판매' };
                 }
             }
             
@@ -771,11 +790,12 @@
                         <div class="module-header">
                             <div class="module-info">
                                 <div class="set-search-wrapper">
+                                    <div class="set-color-box" style="background: ${currentSet.color};"></div>
                                     <input 
                                         type="text" 
                                         class="set-search-input" 
                                         placeholder="세트 검색..."
-                                        value="${module.searchText === '' ? currentSet.icon + ' ' + currentSet.name : module.searchText}"
+                                        value="${module.searchText === '' ? currentSet.name : module.searchText}"
                                         onfocus="this.select(); toggleDropdown(${module.id})"
                                         oninput="updateSearchText(${module.id}, this.value); event.stopPropagation();"
                                         onkeydown="event.stopPropagation();"
@@ -786,7 +806,7 @@
                                                 class="set-dropdown-item ${module.set === set.name ? 'selected' : ''}"
                                                 onclick="updateSet(${module.id}, '${set.name}')"
                                             >
-                                                <span>${set.icon}</span>
+                                                <div class="set-color-indicator" style="background: ${set.color};"></div>
                                                 <span>${set.name}</span>
                                             </div>
                                         `).join('')}
@@ -841,7 +861,7 @@
                         </div>
 
                         <div class="main-stat-info">
-                            📌 주 스텟: ${module.mainStat}
+                            주 스텟: ${module.mainStat} | 세트 효과 (${currentSet.type}피스): ${currentSet.effect}
                         </div>
                         
                         <div class="substats-grid">
