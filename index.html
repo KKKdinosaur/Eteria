@@ -37,11 +37,6 @@
             margin-bottom: 8px;
         }
         
-        .subtitle {
-            color: #7f8c8d;
-            font-size: 0.9em;
-        }
-        
         .add-btn {
             background: #3498db;
             color: white;
@@ -70,8 +65,8 @@
         
         .module-card.keep { border-left-color: #27ae60; }
         .module-card.good { border-left-color: #3498db; }
-        .module-card.maybe { border-left-color: #f39c12; }
         .module-card.sell { border-left-color: #e74c3c; }
+        .module-card.empty { border-left-color: #95a5a6; }
         
         .module-header {
             display: flex;
@@ -89,20 +84,6 @@
             flex-wrap: wrap;
         }
         
-        .set-select, .matrix-select, .substat-count-select, .slot-select {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: white;
-            font-size: 0.9em;
-            cursor: pointer;
-            height: 38px;
-        }
-        
-        .set-select {
-            min-width: 160px;
-        }
-
         .set-search-wrapper {
             position: relative;
             min-width: 160px;
@@ -159,7 +140,14 @@
             background: #e3f2fd;
         }
         
-        .matrix-select, .substat-count-select, .slot-select {
+        select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            height: 38px;
             min-width: 70px;
         }
         
@@ -178,11 +166,6 @@
         .status-badge.good {
             background: #d6eaf8;
             color: #3498db;
-        }
-        
-        .status-badge.maybe {
-            background: #fef5e7;
-            color: #f39c12;
         }
         
         .status-badge.sell {
@@ -496,8 +479,13 @@
         <div class="guide">
             <h3>사용 가이드</h3>
             <div class="guide-item">• <strong>부가 능력치 2개 이하:</strong> 무조건 판매</div>
-            <div class="guide-item">• <strong>부가 능력치 3:</strong> 좋은 옵션 2개 이상이면 보관, 아니면 판매</div>
-            <div class="guide-item">• <strong>부가 능력치 4:</strong> 좋은 옵션 3개 이상이면 보관, 아니면 판매</div>
+            <div class="guide-item">• <strong>부가 능력치 3개:</strong> 좋은 옵션 2개 이상이면 보관</div>
+            <div class="guide-item">• <strong>부가 능력치 4개:</strong> 좋은 옵션 3개 이상이면 보관</div>
+            <div class="guide-item">• <strong>12피스 세트:</strong></div>
+            <div class="guide-item" style="padding-left: 20px;">- 매트릭스 2는 질주/유혈 사태/기세 추격만 보관 (나머지 판매)</div>
+            <div class="guide-item" style="padding-left: 20px;">- 매트릭스 3는 모두 유효</div>
+            <div class="guide-item">• <strong>8피스 세트:</strong></div>
+            <div class="guide-item" style="padding-left: 20px;">- 매트릭스 2, 3 모두 유효</div>
             <div class="guide-item">• <strong>왼쪽 장비:</strong> 부위별로 나올 수 있는 부옵션이 제한됨</div>
             <div class="guide-item">• <strong>오른쪽 장비(코어):</strong> 모든 부옵션 가능 (주옵과 동일 스텟 제외)</div>
         </div>
@@ -511,7 +499,7 @@
             { name: '질주', icon: '💨', type: 12 },
             { name: '수호', icon: '💎', type: 12 },
             { name: '전의', icon: '⚡', type: 12 },
-            { name: '위기', icon: '⚠️', type: 8 },
+            { name: '쐐기', icon: '⚠️', type: 8 },
             { name: '치유', icon: '🍃', type: 8 },
             { name: '진격', icon: '🔷', type: 8 },
             { name: '처단', icon: '🔴', type: 8 },
@@ -519,7 +507,7 @@
             { name: '기세 추격', icon: '👁️', type: 12 },
             { name: '유혈 사태', icon: '🩸', type: 8 },
             { name: '시공 지배', icon: '🦋', type: 12 },
-            { name: '통찰', icon: '👁', type: 12 },
+            { name: '통찰', icon: '💠', type: 12 },
             { name: '폭렬 칼날', icon: '⚔️', type: 8 },
             { name: '역병', icon: '☠️', type: 8 },
             { name: '철벽', icon: '⚙️', type: 8 },
@@ -537,7 +525,6 @@
             '코어': ['공격력%', '방어력%', 'HP%', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항']
         };
 
-        // 왼쪽 장비 부위별 가능한 부옵션
         const availableSubstats = {
             '마스크': ['깡체', '공격력%', '깡방', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
             '트랜지스터': ['HP%', '깡공', '깡방', '속도', '치명타 확률', '치명타 피해', '효과 저항'],
@@ -551,90 +538,27 @@
         ];
 
         const goodStats = {
-            '공세': {
-                main: ['공격력%', '치명타 확률', '치명타 피해'],
-                sub: ['깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중']
-            },
-            '원천': {
-                main: ['깡체', 'HP%', '깡방', '방어력%', '효과 명중', '효과 저항'],
-                sub: ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중', '효과 저항']
-            },
-            '강철': {
-                main: [],
-                sub: ['방어력%', '속도', 'HP%', '효과 명중']
-            },
-            '질주': {
-                main: [],
-                sub: ['속도', 'HP%', '효과 명중', '방어력%']
-            },
-            '수호': {
-                main: [],
-                sub: ['방어력%', 'HP%', '효과 저항', '속도']
-            },
-            '전의': {
-                main: [],
-                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도']
-            },
-            '위기': {
-                main: [],
-                sub: ['속도', 'HP%', '방어력%', '효과 명중']
-            },
-            '치유': {
-                main: [],
-                sub: ['HP%', '속도', '방어력%']
-            },
-            '진격': {
-                main: [],
-                sub: ['속도', 'HP%', '방어력%']
-            },
-            '처단': {
-                main: [],
-                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도']
-            },
-            '광폭': {
-                main: [],
-                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도', 'HP%']
-            },
-            '기세 추격': {
-                main: [],
-                sub: ['치명타 확률', '치명타 피해', '공격력%', '효과 명중', '속도']
-            },
-            '유혈 사태': {
-                main: [],
-                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도']
-            },
-            '시공 지배': {
-                main: [],
-                sub: ['속도', 'HP%', '효과 명중']
-            },
-            '통찰': {
-                main: [],
-                sub: ['치명타 확률', '치명타 피해', '공격력%', '속도', 'HP%']
-            },
-            '폭렬 칼날': {
-                main: [],
-                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도']
-            },
-            '역병': {
-                main: [],
-                sub: ['효과 명중', '속도', 'HP%']
-            },
-            '철벽': {
-                main: [],
-                sub: ['방어력%', 'HP%', '효과 저항', '속도']
-            },
-            '급습 공격': {
-                main: [],
-                sub: ['속도', '공격력%', '치명타 확률']
-            },
-            '섬광 타격': {
-                main: [],
-                sub: ['속도', 'HP%', '효과 명중']
-            },
-            '진화 보호': {
-                main: [],
-                sub: ['HP%', '방어력%', '속도']
-            }
+            '공세': { sub: ['깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중'] },
+            '원천': { sub: ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중', '효과 저항'] },
+            '강철': { sub: ['방어력%', '속도', 'HP%', '효과 명중'] },
+            '질주': { sub: ['속도', 'HP%', '효과 명중', '방어력%'] },
+            '수호': { sub: ['방어력%', 'HP%', '효과 저항', '속도'] },
+            '전의': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도'] },
+            '쐐기': { sub: ['속도', 'HP%', '방어력%', '효과 명중'] },
+            '치유': { sub: ['HP%', '속도', '방어력%'] },
+            '진격': { sub: ['속도', 'HP%', '방어력%'] },
+            '처단': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도'] },
+            '광폭': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도', 'HP%'] },
+            '기세 추격': { sub: ['치명타 확률', '치명타 피해', '공격력%', '효과 명중', '속도'] },
+            '유혈 사태': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도'] },
+            '시공 지배': { sub: ['속도', 'HP%', '효과 명중'] },
+            '통찰': { sub: ['치명타 확률', '치명타 피해', '공격력%', '속도', 'HP%'] },
+            '폭렬 칼날': { sub: ['공격력%', '치명타 확률', '치명타 피해', '속도'] },
+            '역병': { sub: ['효과 명중', '속도', 'HP%'] },
+            '철벽': { sub: ['방어력%', 'HP%', '효과 저항', '속도'] },
+            '급습 공격': { sub: ['속도', '공격력%', '치명타 확률'] },
+            '섬광 타격': { sub: ['속도', 'HP%', '효과 명중'] },
+            '진화 보호': { sub: ['HP%', '방어력%', '속도'] }
         };
 
         let modules = [];
@@ -729,8 +653,7 @@
         function updateSubstatCount(id, count) {
             const module = modules.find(m => m.id === id);
             if (module) {
-                const newCount = parseInt(count);
-                module.substatCount = newCount;
+                module.substatCount = parseInt(count);
                 module.substats = {};
                 renderModules();
             }
@@ -763,41 +686,58 @@
                 return { status: 'empty', text: '옵션 미선택' };
             }
             
-            // 부가 능력치 3개 미만은 무조건 판매
             if (module.substatCount < 3) {
                 return { status: 'sell', text: '판매 (능력치 부족)' };
             }
             
             if (currentSet.type === 12) {
+                const isException = ['질주', '유혈 사태', '기세 추격'].includes(module.set);
+                
                 if (module.matrix === 3) {
-                    if (goodCount >= 3) {
-                        return { status: 'keep', text: '보관 필수 (메인)' };
+                    if (module.substatCount === 4) {
+                        if (goodCount >= 3) return { status: 'keep', text: '보관 필수 (메인)' };
+                        if (goodCount >= 2) return { status: 'good', text: '보관 권장 (메인)' };
+                        return { status: 'sell', text: '판매 추천' };
                     }
-                    if (goodCount >= 2) {
-                        return { status: 'good', text: '보관 권장 (메인)' };
-                    }
+                    // 부가 능력치 3개
+                    if (goodCount === 3) return { status: 'keep', text: '보관 필수 (메인)' };
+                    if (goodCount >= 2) return { status: 'good', text: '보관 권장 (메인)' };
                     return { status: 'sell', text: '판매 추천' };
                 } else if (module.matrix === 2) {
-                    if (goodCount >= 3) {
-                        return { status: 'keep', text: '보관 필수 (서브)' };
+                    if (!isException) return { status: 'sell', text: '판매 (매트릭스 낮음)' };
+                    
+                    if (module.substatCount === 4) {
+                        if (goodCount >= 3) return { status: 'keep', text: '보관 필수 (서브)' };
+                        if (goodCount >= 2) return { status: 'good', text: '보관 권장 (서브)' };
+                        return { status: 'sell', text: '판매 (서브용 부족)' };
                     }
+                    // 부가 능력치 3개
+                    if (goodCount === 3) return { status: 'keep', text: '보관 필수 (서브)' };
+                    if (goodCount >= 2) return { status: 'good', text: '보관 권장 (서브)' };
                     return { status: 'sell', text: '판매 (서브용 부족)' };
                 }
             }
             
             if (currentSet.type === 8) {
                 if (module.matrix === 3) {
-                    if (goodCount >= 3) {
-                        return { status: 'keep', text: '보관 필수 (메인)' };
+                    if (module.substatCount === 4) {
+                        if (goodCount >= 3) return { status: 'keep', text: '보관 필수 (메인)' };
+                        if (goodCount >= 2) return { status: 'good', text: '보관 권장 (메인)' };
+                        return { status: 'sell', text: '판매 추천' };
                     }
-                    if (goodCount >= 2) {
-                        return { status: 'good', text: '보관 권장 (메인)' };
-                    }
+                    // 부가 능력치 3개
+                    if (goodCount === 3) return { status: 'keep', text: '보관 필수 (메인)' };
+                    if (goodCount >= 2) return { status: 'good', text: '보관 권장 (메인)' };
                     return { status: 'sell', text: '판매 추천' };
                 } else if (module.matrix === 2) {
-                    if (goodCount >= 2) {
-                        return { status: 'good', text: '보관 권장 (서브)' };
+                    if (module.substatCount === 4) {
+                        if (goodCount >= 3) return { status: 'keep', text: '보관 필수 (서브)' };
+                        if (goodCount >= 2) return { status: 'good', text: '보관 권장 (서브)' };
+                        return { status: 'sell', text: '판매 (서브용 부족)' };
                     }
+                    // 부가 능력치 3개
+                    if (goodCount === 3) return { status: 'keep', text: '보관 필수 (서브)' };
+                    if (goodCount >= 2) return { status: 'good', text: '보관 권장 (서브)' };
                     return { status: 'sell', text: '판매 (서브용 부족)' };
                 }
             }
@@ -825,10 +765,7 @@
                 );
                 const isDropdownOpen = openDropdownId === module.id;
                 
-                // 현재 부위에서 사용 가능한 부옵션
                 const availableSubs = availableSubstats[module.slot];
-                
-                // 코어인 경우 주옵과 같은 스텟 제외
                 let validSubstats = availableSubs;
                 if (module.slot === '코어') {
                     validSubstats = availableSubs.filter(stat => stat !== module.mainStat);
@@ -864,7 +801,7 @@
 
                                 <div class="select-wrapper">
                                     <div class="select-label">부위</div>
-                                    <select class="slot-select" onchange="updateSlot(${module.id}, this.value)">
+                                    <select onchange="updateSlot(${module.id}, this.value)">
                                         ${slots.map(slot => `
                                             <option value="${slot}" ${module.slot === slot ? 'selected' : ''}>${slot}</option>
                                         `).join('')}
@@ -874,7 +811,7 @@
                                 ${module.slot === '코어' ? `
                                     <div class="select-wrapper">
                                         <div class="select-label">주 스텟</div>
-                                        <select class="slot-select" onchange="updateMainStat(${module.id}, this.value)" style="min-width: 120px;">
+                                        <select onchange="updateMainStat(${module.id}, this.value)" style="min-width: 120px;">
                                             ${mainStats['코어'].map(stat => `
                                                 <option value="${stat}" ${module.mainStat === stat ? 'selected' : ''}>${stat}</option>
                                             `).join('')}
@@ -884,7 +821,7 @@
                                 
                                 <div class="select-wrapper">
                                     <div class="select-label">매트릭스</div>
-                                    <select class="matrix-select" onchange="updateMatrix(${module.id}, this.value)">
+                                    <select onchange="updateMatrix(${module.id}, this.value)">
                                         ${[2,3].map(num => `
                                             <option value="${num}" ${module.matrix === num ? 'selected' : ''}>${num}</option>
                                         `).join('')}
@@ -893,7 +830,7 @@
 
                                 <div class="select-wrapper">
                                     <div class="select-label">부가 능력치</div>
-                                    <select class="substat-count-select" onchange="updateSubstatCount(${module.id}, this.value)">
+                                    <select onchange="updateSubstatCount(${module.id}, this.value)">
                                         ${[3,4].map(num => `
                                             <option value="${num}" ${module.substatCount === num ? 'selected' : ''}>${num}</option>
                                         `).join('')}
@@ -909,7 +846,7 @@
                         </div>
 
                         <div class="main-stat-info">
-                            📍 주 스텟: ${module.mainStat}
+                            📌 주 스텟: ${module.mainStat}
                         </div>
                         
                         <div class="substats-grid">
@@ -939,4 +876,3 @@
     </script>
 </body>
 </html>
-                        
