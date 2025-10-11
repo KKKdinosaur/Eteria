@@ -89,7 +89,7 @@
             flex-wrap: wrap;
         }
         
-        .set-select, .matrix-select, .substat-count-select {
+        .set-select, .matrix-select, .substat-count-select, .slot-select {
             padding: 8px 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
@@ -101,10 +101,6 @@
         
         .set-select {
             min-width: 160px;
-        }
-        
-        .set-option {
-            padding: 4px;
         }
 
         .set-search-wrapper {
@@ -163,7 +159,7 @@
             background: #e3f2fd;
         }
         
-        .matrix-select, .substat-count-select {
+        .matrix-select, .substat-count-select, .slot-select {
             min-width: 70px;
         }
         
@@ -261,6 +257,10 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        .substat-btn.hidden {
+            display: none;
+        }
         
         .guide {
             background: white;
@@ -281,6 +281,57 @@
             color: #555;
             font-size: 0.9em;
         }
+
+        .stat-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.85em;
+        }
+
+        .stat-table thead {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .stat-table th {
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .stat-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .stat-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .stat-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+
+        .stat-icon.atk { background: #fee; color: #c92a2a; }
+        .stat-icon.hp { background: #e7f5ff; color: #1971c2; }
+        .stat-icon.def { background: #f3f0ff; color: #5f3dc4; }
+        .stat-icon.percent { background: #fff3bf; color: #e67700; }
+        .stat-icon.crit { background: #ffe3e3; color: #c92a2a; }
+        .stat-icon.effect { background: #e3fafc; color: #0b7285; }
         
         .empty-state {
             text-align: center;
@@ -300,13 +351,142 @@
             display: flex;
             flex-direction: column;
         }
+
+        .main-stat-info {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #495057;
+            margin-bottom: 12px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>에테리아 모듈 판매 체크</h1>
-            <p class="subtitle">부옵션 선택 시 자동으로 보관/판매 여부를 판단</p>
+            <h1>부옵션 강화 수치표</h1>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>스텟</th>
+                        <th>1회당 범위</th>
+                        <th>최대 강화 (15강)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon atk">공</span>
+                                깡공
+                            </div>
+                        </td>
+                        <td>19-22</td>
+                        <td>132</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon def">방</span>
+                                깡방
+                            </div>
+                        </td>ㅊ
+                        <td>13-14</td>
+                        <td>84</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon hp">체</span>
+                                깡체
+                            </div>
+                        </td>
+                        <td>192-222</td>
+                        <td>1212(?)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon percent">공퍼</span>
+                                공격력%
+                            </div>
+                        </td>
+                        <td>2-3%</td>
+                        <td>18%</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon percent">체퍼</span>
+                                HP%
+                            </div>
+                        </td>
+                        <td>2-3%</td>
+                        <td>18%</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon percent">방퍼</span>
+                                방어력%
+                            </div>
+                        </td>
+                        <td>2-3%</td>
+                        <td>18%</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon percent">질주</span>
+                                속도
+                            </div>
+                        </td>
+                        <td>2+</td>
+                        <td>18 (24*)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon crit">크리</span>
+                                치명타율
+                            </div>
+                        </td>
+                        <td>2-3%</td>
+                        <td>18%</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon crit">치피</span>
+                                치명타 대미지
+                            </div>
+                        </td>
+                        <td>3-4%</td>
+                        <td>24%</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon effect">효적</span>
+                                효과 명중
+                            </div>
+                        </td>
+                        <td>3-4%</td>
+                        <td>24%</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stat-name">
+                                <span class="stat-icon effect">효저</span>
+                                효과 저항
+                            </div>
+                        </td>
+                        <td>3-4%</td>
+                        <td>24%</td>
+                    </tr>
+                </tbody>
+            </table>
         </header>
         
         <button class="add-btn" onclick="addModule()">+ 모듈 추가</button>
@@ -315,9 +495,11 @@
         
         <div class="guide">
             <h3>사용 가이드</h3>
-            <div class="guide-item">• <strong>부가 능력치 1~2개:</strong> 무조건 판매</div>
-            <div class="guide-item">• <strong>부가 능력치 3개:</strong> 좋은 옵션 2개 이상이면 보관, 아니면 판매</div>
-            <div class="guide-item">• <strong>부가 능력치 4개:</strong> 좋은 옵션 2개 이상이면 보관, 아니면 판매</div>
+            <div class="guide-item">• <strong>부가 능력치 2개 이하:</strong> 무조건 판매</div>
+            <div class="guide-item">• <strong>부가 능력치 3:</strong> 좋은 옵션 2개 이상이면 보관, 아니면 판매</div>
+            <div class="guide-item">• <strong>부가 능력치 4:</strong> 좋은 옵션 2개 이상이면 보관, 아니면 판매</div>
+            <div class="guide-item">• <strong>왼쪽 장비:</strong> 부위별로 나올 수 있는 부옵션이 제한됨</div>
+            <div class="guide-item">• <strong>오른쪽 장비(코어):</strong> 모든 부옵션 가능 (주옵과 동일 스텟 제외)</div>
         </div>
     </div>
 
@@ -329,7 +511,7 @@
             { name: '질주', icon: '💨', type: 12 },
             { name: '수호', icon: '💎', type: 12 },
             { name: '전의', icon: '⚡', type: 12 },
-            { name: '쐐기', icon: '⚠️', type: 8 },
+            { name: '위기', icon: '⚠️', type: 8 },
             { name: '치유', icon: '🍃', type: 8 },
             { name: '진격', icon: '🔷', type: 8 },
             { name: '처단', icon: '🔴', type: 8 },
@@ -337,7 +519,7 @@
             { name: '기세 추격', icon: '👁️', type: 12 },
             { name: '유혈 사태', icon: '🩸', type: 8 },
             { name: '시공 지배', icon: '🦋', type: 12 },
-            { name: '통찰', icon: '💠', type: 12 },
+            { name: '통찰', icon: '👁', type: 12 },
             { name: '폭렬 칼날', icon: '⚔️', type: 8 },
             { name: '역병', icon: '☠️', type: 8 },
             { name: '철벽', icon: '⚙️', type: 8 },
@@ -346,33 +528,113 @@
             { name: '진화 보호', icon: '🔰', type: 8 }
         ];
 
-        const substats = [
-            'HP 보너스', 'HP %', '공격력 보너스', '공격력 %', '방어력 보너스', 
-            '방어력 %', '속도', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항'
+        const slots = ['마스크', '트랜지스터', '반지', '코어'];
+
+        const mainStats = {
+            '마스크': ['깡공'],
+            '트랜지스터': ['깡체'],
+            '반지': ['깡방'],
+            '코어': ['공격력%', '방어력%', 'HP%', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항']
+        };
+
+        // 왼쪽 장비 부위별 가능한 부옵션
+        const availableSubstats = {
+            '마스크': ['깡체', '공격력%', '깡방', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
+            '트랜지스터': ['HP%', '깡공', '깡방', '속도', '치명타 확률', '치명타 피해', '효과 저항'],
+            '반지': ['깡체', '깡공', '방어력%', '속도', '치명타 확률', '효과 명중', '효과 저항'],
+            '코어': ['깡체', 'HP%', '깡공', '공격력%', '깡방', '방어력%', '속도', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항']
+        };
+
+        const allSubstats = [
+            '깡체', 'HP%', '깡공', '공격력%', '깡방', 
+            '방어력%', '속도', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항'
         ];
 
         const goodStats = {
-            '공세': ['공격력 %', '치명타 확률', '치명타 피해', '속도', 'HP %'],
-            '원천': ['HP %', '속도', '방어력 %'],
-            '강철': ['방어력 %', '속도', 'HP %', '효과 명중'],
-            '질주': ['속도', 'HP %', '효과 명중', '방어력 %'],
-            '수호': ['방어력 %', 'HP %', '효과 저항', '속도'],
-            '전의': ['공격력 %', '치명타 확률', '치명타 피해', '속도'],
-            '쐐기': ['속도', 'HP %', '방어력 %', '효과 명중'],
-            '치유': ['HP %', '속도', '방어력 %'],
-            '진격': ['속도', 'HP %', '방어력 %'],
-            '처단': ['공격력 %', '치명타 확률', '치명타 피해', '속도'],
-            '광폭': ['공격력 %', '치명타 확률', '치명타 피해', '속도', 'HP %'],
-            '기세 추격': ['치명타 확률', '치명타 피해', '공격력 %', '효과 명중', '속도'],
-            '유혈 사태': ['공격력 %', '치명타 확률', '치명타 피해', '속도'],
-            '시공 지배': ['속도', 'HP %', '효과 명중'],
-            '통찰': ['치명타 확률', '치명타 피해', '공격력 %', '속도', 'HP %'],
-            '폭렬 칼날': ['공격력 %', '치명타 확률', '치명타 피해', '속도'],
-            '역병': ['효과 명중', '속도', 'HP %'],
-            '철벽': ['방어력 %', 'HP %', '효과 저항', '속도'],
-            '급습 공격': ['속도', '공격력 %', '치명타 확률'],
-            '섬광 타격': ['속도', 'HP %', '효과 명중'],
-            '진화 보호': ['HP %', '방어력 %', '속도']
+            '공세': {
+                main: ['공격력%', '치명타 확률', '치명타 피해'],
+                sub: ['깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중']
+            },
+            '원천': {
+                main: ['깡체', 'HP%', '깡방', '방어력%', '효과 명중', '효과 저항'],
+                sub: ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중', '효과 저항']
+            },
+            '강철': {
+                main: [],
+                sub: ['방어력%', '속도', 'HP%', '효과 명중']
+            },
+            '질주': {
+                main: [],
+                sub: ['속도', 'HP%', '효과 명중', '방어력%']
+            },
+            '수호': {
+                main: [],
+                sub: ['방어력%', 'HP%', '효과 저항', '속도']
+            },
+            '전의': {
+                main: [],
+                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도']
+            },
+            '위기': {
+                main: [],
+                sub: ['속도', 'HP%', '방어력%', '효과 명중']
+            },
+            '치유': {
+                main: [],
+                sub: ['HP%', '속도', '방어력%']
+            },
+            '진격': {
+                main: [],
+                sub: ['속도', 'HP%', '방어력%']
+            },
+            '처단': {
+                main: [],
+                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도']
+            },
+            '광폭': {
+                main: [],
+                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도', 'HP%']
+            },
+            '기세 추격': {
+                main: [],
+                sub: ['치명타 확률', '치명타 피해', '공격력%', '효과 명중', '속도']
+            },
+            '유혈 사태': {
+                main: [],
+                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도']
+            },
+            '시공 지배': {
+                main: [],
+                sub: ['속도', 'HP%', '효과 명중']
+            },
+            '통찰': {
+                main: [],
+                sub: ['치명타 확률', '치명타 피해', '공격력%', '속도', 'HP%']
+            },
+            '폭렬 칼날': {
+                main: [],
+                sub: ['공격력%', '치명타 확률', '치명타 피해', '속도']
+            },
+            '역병': {
+                main: [],
+                sub: ['효과 명중', '속도', 'HP%']
+            },
+            '철벽': {
+                main: [],
+                sub: ['방어력%', 'HP%', '효과 저항', '속도']
+            },
+            '급습 공격': {
+                main: [],
+                sub: ['속도', '공격력%', '치명타 확률']
+            },
+            '섬광 타격': {
+                main: [],
+                sub: ['속도', 'HP%', '효과 명중']
+            },
+            '진화 보호': {
+                main: [],
+                sub: ['HP%', '방어력%', '속도']
+            }
         };
 
         let modules = [];
@@ -383,8 +645,10 @@
             const module = {
                 id: nextId++,
                 set: '통찰',
+                slot: '마스크',
+                mainStat: '깡공',
                 matrix: 2,
-                substatCount: 4,
+                substatCount: 3,
                 substats: {},
                 searchText: ''
             };
@@ -408,6 +672,25 @@
             }
         }
 
+        function updateSlot(id, slot) {
+            const module = modules.find(m => m.id === id);
+            if (module) {
+                module.slot = slot;
+                module.mainStat = mainStats[slot][0];
+                module.substats = {};
+                renderModules();
+            }
+        }
+
+        function updateMainStat(id, stat) {
+            const module = modules.find(m => m.id === id);
+            if (module) {
+                module.mainStat = stat;
+                module.substats = {};
+                renderModules();
+            }
+        }
+
         function updateSearchText(id, text) {
             const module = modules.find(m => m.id === id);
             if (module) {
@@ -427,7 +710,6 @@
             renderModules();
         }
 
-        // 클릭 외부 감지
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.set-search-wrapper')) {
                 if (openDropdownId !== null) {
@@ -447,7 +729,8 @@
         function updateSubstatCount(id, count) {
             const module = modules.find(m => m.id === id);
             if (module) {
-                module.substatCount = parseInt(count);
+                const newCount = parseInt(count);
+                module.substatCount = newCount;
                 module.substats = {};
                 renderModules();
             }
@@ -470,7 +753,7 @@
 
         function evaluateModule(module) {
             const selectedStats = Object.keys(module.substats).filter(s => module.substats[s]);
-            const good = goodStats[module.set] || [];
+            const good = goodStats[module.set]?.sub || [];
             const currentSet = sets.find(s => s.name === module.set);
             
             const goodCount = selectedStats.filter(s => good.includes(s)).length;
@@ -480,15 +763,13 @@
                 return { status: 'empty', text: '옵션 미선택' };
             }
             
-            // 부가 능력치 1~2개는 무조건 판매
-            if (module.substatCount <= 2) {
+            // 부가 능력치 3개 미만은 무조건 판매
+            if (module.substatCount < 3) {
                 return { status: 'sell', text: '판매 (능력치 부족)' };
             }
             
-            // 12피스 세트
             if (currentSet.type === 12) {
                 if (module.matrix === 3) {
-                    // 매트릭스 3: 좋은 옵션 2개 이상이면 보관
                     if (goodCount >= 3) {
                         return { status: 'keep', text: '보관 필수 (메인)' };
                     }
@@ -497,7 +778,6 @@
                     }
                     return { status: 'sell', text: '판매 추천' };
                 } else if (module.matrix === 2) {
-                    // 매트릭스 2: 좋은 옵션 3개 이상이면 보관
                     if (goodCount >= 3) {
                         return { status: 'keep', text: '보관 필수 (서브)' };
                     }
@@ -505,10 +785,8 @@
                 }
             }
             
-            // 8피스 세트
             if (currentSet.type === 8) {
                 if (module.matrix === 3) {
-                    // 매트릭스 3: 좋은 옵션 2개 이상이면 보관
                     if (goodCount >= 3) {
                         return { status: 'keep', text: '보관 필수 (메인)' };
                     }
@@ -517,7 +795,6 @@
                     }
                     return { status: 'sell', text: '판매 추천' };
                 } else if (module.matrix === 2) {
-                    // 매트릭스 2: 좋은 옵션 2개 이상이면 보관
                     if (goodCount >= 2) {
                         return { status: 'good', text: '보관 권장 (서브)' };
                     }
@@ -538,16 +815,24 @@
             
             container.innerHTML = modules.map(module => {
                 const evaluation = evaluateModule(module);
-                const good = goodStats[module.set] || [];
+                const good = goodStats[module.set]?.sub || [];
                 const selectedCount = Object.values(module.substats).filter(v => v).length;
                 const currentSet = sets.find(s => s.name === module.set);
                 
-                // 검색 필터링
                 const searchLower = module.searchText.toLowerCase();
                 const filteredSets = sets.filter(set => 
                     set.name.toLowerCase().includes(searchLower)
                 );
                 const isDropdownOpen = openDropdownId === module.id;
+                
+                // 현재 부위에서 사용 가능한 부옵션
+                const availableSubs = availableSubstats[module.slot];
+                
+                // 코어인 경우 주옵과 같은 스텟 제외
+                let validSubstats = availableSubs;
+                if (module.slot === '코어') {
+                    validSubstats = availableSubs.filter(stat => stat !== module.mainStat);
+                }
                 
                 return `
                     <div class="module-card ${evaluation.status}">
@@ -576,11 +861,31 @@
                                         ${filteredSets.length === 0 ? '<div class="set-dropdown-item" style="color: #999;">검색 결과 없음</div>' : ''}
                                     </div>
                                 </div>
+
+                                <div class="select-wrapper">
+                                    <div class="select-label">부위</div>
+                                    <select class="slot-select" onchange="updateSlot(${module.id}, this.value)">
+                                        ${slots.map(slot => `
+                                            <option value="${slot}" ${module.slot === slot ? 'selected' : ''}>${slot}</option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+
+                                ${module.slot === '코어' ? `
+                                    <div class="select-wrapper">
+                                        <div class="select-label">주 스텟</div>
+                                        <select class="slot-select" onchange="updateMainStat(${module.id}, this.value)" style="min-width: 120px;">
+                                            ${mainStats['코어'].map(stat => `
+                                                <option value="${stat}" ${module.mainStat === stat ? 'selected' : ''}>${stat}</option>
+                                            `).join('')}
+                                        </select>
+                                    </div>
+                                ` : ''}
                                 
                                 <div class="select-wrapper">
                                     <div class="select-label">매트릭스</div>
                                     <select class="matrix-select" onchange="updateMatrix(${module.id}, this.value)">
-                                        ${[1,2,3].map(num => `
+                                        ${[2,3].map(num => `
                                             <option value="${num}" ${module.matrix === num ? 'selected' : ''}>${num}</option>
                                         `).join('')}
                                     </select>
@@ -589,8 +894,8 @@
                                 <div class="select-wrapper">
                                     <div class="select-label">부가 능력치</div>
                                     <select class="substat-count-select" onchange="updateSubstatCount(${module.id}, this.value)">
-                                        ${[1,2,3,4].map(num => `
-                                            <option value="${num}" ${module.substatCount === num ? 'selected' : ''}>${num}개</option>
+                                        ${[3,4].map(num => `
+                                            <option value="${num}" ${module.substatCount === num ? 'selected' : ''}>${num}</option>
                                         `).join('')}
                                     </select>
                                 </div>
@@ -602,18 +907,23 @@
                             
                             <button class="remove-btn" onclick="removeModule(${module.id})">삭제</button>
                         </div>
+
+                        <div class="main-stat-info">
+                            📍 주 스텟: ${module.mainStat}
+                        </div>
                         
                         <div class="substats-grid">
-                            ${substats.map(stat => {
+                            ${allSubstats.map(stat => {
+                                const isAvailable = validSubstats.includes(stat);
                                 const isGood = good.includes(stat);
                                 const isSelected = module.substats[stat];
                                 const isDisabled = !isSelected && selectedCount >= module.substatCount;
                                 
                                 return `
                                     <button 
-                                        class="substat-btn ${isGood ? 'good' : 'bad'} ${isSelected ? 'selected' : ''}"
+                                        class="substat-btn ${isGood ? 'good' : 'bad'} ${isSelected ? 'selected' : ''} ${!isAvailable ? 'hidden' : ''}"
                                         onclick="toggleSubstat(${module.id}, '${stat}')"
-                                        ${isDisabled ? 'disabled' : ''}
+                                        ${isDisabled || !isAvailable ? 'disabled' : ''}
                                     >
                                         ${stat}
                                     </button>
@@ -629,3 +939,4 @@
     </script>
 </body>
 </html>
+                        
