@@ -1,571 +1,111 @@
-# Writing corrected HTML file to /mnt/data/etheria_module_guide (2).html
-html = r"""<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>에테리아 모듈 판매</title>
+    <title>에테리아 모듈 판매 체크</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #fafafa;
-            padding: 20px;
-            line-height: 1.5;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        header {
-            background: white;
-            padding: 20px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            font-size: 1.5em;
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
-        
-        .add-btn {
-            background: #2196F3;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 500;
-            margin-bottom: 20px;
-        }
-        
-        .add-btn:hover {
-            background: #1976D2;
-        }
-        
-        .module-card {
-            background: white;
-            border-radius: 4px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            border-left: 3px solid #e0e0e0;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; padding: 20px; line-height: 1.5; color: #333; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        h1 { font-size: 1.5em; color: #2c3e50; margin-bottom: 12px; }
+        .editor-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .editor-header h2 { font-size: 1.2em; color: #2c3e50; }
+        .editor-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        select { padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 4px; background: white; font-size: 0.9em; cursor: pointer; min-width: 150px; }
+        textarea { width: 100%; min-height: 250px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.85em; resize: vertical; }
+        .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; font-weight: 500; }
+        .btn-primary { background: #2196F3; color: white; }
+        .btn-success { background: #4CAF50; color: white; }
+        .btn-danger { background: #f44336; color: white; }
+        .notice { background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 12px; border-radius: 4px; margin-top: 12px; font-size: 0.85em; }
+        .add-btn { background: #2196F3; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: 500; margin-bottom: 20px; }
+        .module-card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #e0e0e0; }
         .module-card.keep { border-left-color: #4CAF50; }
-        .module-card.good { border-left-color: #2196F3; }
         .module-card.sell { border-left-color: #f44336; }
         .module-card.empty { border-left-color: #9E9E9E; }
-        
-        .module-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .module-info {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-            flex-wrap: wrap;
-        }
-        
-        .set-search-wrapper {
-            position: relative;
-            min-width: 160px;
-        }
-
-        .set-search-input {
-            width: 100%;
-            padding: 8px 12px 8px 32px;
-            border: 1px solid #e0e0e0;
-            border-radius: 3px;
-            font-size: 0.9em;
-            height: 36px;
-        }
-
-        .set-search-wrapper {
-            position: relative;
-            min-width: 160px;
-        }
-
-        .set-color-box {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            pointer-events: none;
-        }
-
-        .set-search-input:focus {
-            outline: none;
-            border-color: #2196F3;
-        }
-
-        .set-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 3px;
-            margin-top: 4px;
-            max-height: 300px;
-            overflow-y: auto;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            z-index: 1000;
-            display: none;
-        }
-
-        .set-dropdown.show {
-            display: block;
-        }
-
-        .set-dropdown-item {
-            padding: 10px 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .set-dropdown-item:hover {
-            background: #f5f5f5;
-        }
-
-        .set-dropdown-item.selected {
-            background: #E3F2FD;
-        }
-
-        .set-color-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-        
-        select {
-            padding: 8px 12px;
-            border: 1px solid #e0e0e0;
-            border-radius: 3px;
-            background: white;
-            font-size: 0.9em;
-            cursor: pointer;
-            height: 36px;
-            min-width: 70px;
-        }
-        
-        .status-badge {
-            padding: 4px 10px;
-            border-radius: 3px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-        
-        .status-badge.keep {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-        
-        .status-badge.good {
-            background: #E3F2FD;
-            color: #1565C0;
-        }
-        
-        .status-badge.sell {
-            background: #FFEBEE;
-            color: #C62828;
-        }
-        
-        .status-badge.empty {
-            background: #F5F5F5;
-            color: #616161;
-        }
-        
-        .remove-btn {
-            background: white;
-            color: #f44336;
-            border: 1px solid #f44336;
-            padding: 6px 12px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.85em;
-        }
-        
-        .remove-btn:hover {
-            background: #f44336;
-            color: white;
-        }
-        
-        .substats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 8px;
-        }
-        
-        .substat-btn {
-            padding: 8px;
-            border: 1px solid #e0e0e0;
-            border-radius: 3px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 0.85em;
-            background: white;
-        }
-        
-        .substat-btn.good {
-            border-color: #4CAF50;
-            background: #F1F8E9;
-        }
-        
-        .substat-btn.good:hover {
-            background: #DCEDC8;
-        }
-        
-        .substat-btn.good.selected {
-            background: #4CAF50;
-            color: white;
-            border-color: #4CAF50;
-        }
-        
-        .substat-btn.bad:hover {
-            background: #f5f5f5;
-        }
-        
-        .substat-btn.bad.selected {
-            background: #757575;
-            color: white;
-            border-color: #757575;
-        }
-        
-        .substat-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .substat-btn.hidden {
-            display: none;
-        }
-        
-        .guide {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .guide h3 {
-            font-size: 1.1em;
-            color: #2c3e50;
-            margin-bottom: 12px;
-        }
-        
-        .guide-item {
-            padding: 8px 0;
-            color: #555;
-            font-size: 0.9em;
-        }
-
-        .stat-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-            font-size: 0.85em;
-        }
-
-        .stat-table thead {
-            background: #2c3e50;
-            color: white;
-        }
-
-        .stat-table th {
-            padding: 10px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .stat-table td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .stat-table tbody tr:hover {
-            background: #f8f9fa;
-        }
-
-        .stat-name {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stat-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #e9ecef;
-            border-radius: 4px;
-            font-size: 0.75em;
-        }
-
-        .stat-icon.atk { background: #fee; color: #c92a2a; }
-        .stat-icon.hp { background: #e7f5ff; color: #1971c2; }
-        .stat-icon.def { background: #f3f0ff; color: #5f3dc4; }
-        .stat-icon.percent { background: #fff3bf; color: #e67700; }
-        .stat-icon.crit { background: #ffe3e3; color: #c92a2a; }
-        .stat-icon.effect { background: #e3fafc; color: #0b7285; }
-        
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #95a5a6;
-            background: white;
-            border-radius: 8px;
-        }
-
-        .select-label {
-            font-size: 0.75em;
-            color: #7f8c8d;
-            margin-bottom: 2px;
-        }
-
-        .select-wrapper {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .main-stat-info {
-            background: #f5f5f5;
-            padding: 12px;
-            border-radius: 3px;
-            font-size: 1em;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 15px;
-            border-left: 3px solid #2196F3;
-        }
+        .module-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 15px; flex-wrap: wrap; }
+        .module-info { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+        .select-wrapper { display: flex; flex-direction: column; }
+        .select-label { font-size: 0.75em; color: #7f8c8d; margin-bottom: 4px; }
+        .status-badge { padding: 6px 12px; border-radius: 4px; font-size: 0.85em; font-weight: 600; }
+        .status-badge.keep { background: #E8F5E9; color: #2E7D32; }
+        .status-badge.sell { background: #FFEBEE; color: #C62828; }
+        .status-badge.empty { background: #F5F5F5; color: #616161; }
+        .remove-btn { background: white; color: #f44336; border: 1px solid #f44336; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85em; }
+        .main-stat-info { background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 0.95em; font-weight: 600; color: #333; margin-bottom: 15px; border-left: 4px solid #2196F3; }
+        .substats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+        .substat-btn { padding: 10px; border: 2px solid #e0e0e0; border-radius: 4px; cursor: pointer; text-align: center; font-size: 0.85em; background: white; }
+        .substat-btn.good { border-color: #4CAF50; background: #F1F8E9; }
+        .substat-btn.good.selected { background: #4CAF50; color: white; }
+        .substat-btn.bad.selected { background: #757575; color: white; }
+        .substat-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .substat-btn.hidden { display: none; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #95a5a6; background: white; border-radius: 8px; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>부옵션 강화 수치표</h1>
-            <table class="stat-table">
-                <thead>
-                    <tr>
-                        <th>스텟</th>
-                        <th>1회당 범위</th>
-                        <th>최대 강화 (15강)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon atk">공</span>
-                                깡공
-                            </div>
-                        </td>
-                        <td>19-22</td>
-                        <td>132</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon def">방</span>
-                                깡방
-                            </div>
-                        </td>
-                        <td>13-14</td>
-                        <td>84</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon hp">체</span>
-                                깡체
-                            </div>
-                        </td>
-                        <td>192-222</td>
-                        <td>1212(?)</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon percent">공퍼</span>
-                                공격력%
-                            </div>
-                        </td>
-                        <td>2-3%</td>
-                        <td>18%</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon percent">체퍼</span>
-                                HP%
-                            </div>
-                        </td>
-                        <td>2-3%</td>
-                        <td>18%</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon percent">방퍼</span>
-                                방어력%
-                            </div>
-                        </td>
-                        <td>2-3%</td>
-                        <td>18%</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon percent">질주</span>
-                                속도
-                            </div>
-                        </td>
-                        <td>2+</td>
-                        <td>18 (24*)</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon crit">크리</span>
-                                치명타율
-                            </div>
-                        </td>
-                        <td>2-3%</td>
-                        <td>18%</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon crit">치피</span>
-                                치명타 대미지
-                            </div>
-                        </td>
-                        <td>3-4%</td>
-                        <td>24%</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon effect">효적</span>
-                                효과 명중
-                            </div>
-                        </td>
-                        <td>3-4%</td>
-                        <td>24%</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stat-name">
-                                <span class="stat-icon effect">효저</span>
-                                효과 저항
-                            </div>
-                        </td>
-                        <td>3-4%</td>
-                        <td>24%</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h1>에테리아 모듈 판매 체크</h1>
         </header>
-        
-        <button class="add-btn" onclick="addModule()">+ 모듈 추가</button>
-        
-        <div id="modules-container"></div>
-        
-        <div class="guide">
-            <h3>사용 가이드</h3>
-            <div class="guide-item">• <strong>부가 능력치 2개 이하:</strong> 무조건 판매</div>
-            <div class="guide-item">• <strong>부가 능력치 3개:</strong> 좋은 옵션 3개면 보관, 나머지 판매</div>
-            <div class="guide-item">• <strong>부가 능력치 4개:</strong> 좋은 옵션 3개 이상이면 보관, 나머지 판매</div>
-            <div class="guide-item">• <strong>12피스 세트:</strong></div>
-            <div class="guide-item" style="padding-left: 20px;">- 매트릭스 2는 질주/유혈 사태/기세 추격만 보관 (나머지 판매)</div>
-            <div class="guide-item" style="padding-left: 20px;">- 매트릭스 3는 모두 유효</div>
-            <div class="guide-item">• <strong>8피스 세트:</strong></div>
-            <div class="guide-item" style="padding-left: 20px;">- 매트릭스 2, 3 모두 유효</div>
-            <div class="guide-item">• <strong>왼쪽 장비:</strong> 부위별로 나올 수 있는 부옵션이 제한됨</div>
-            <div class="guide-item">• <strong>오른쪽 장비(코어):</strong> 모든 부옵션 가능 (주옵과 동일 스텟 제외)</div>
+
+        <div class="editor-section">
+            <div class="editor-header">
+                <h2>세트별 유효옵션 편집</h2>
+                <div class="editor-controls">
+                    <select id="set-selector"></select>
+                    <button class="btn btn-primary" onclick="loadSetData()">불러오기</button>
+                    <button class="btn btn-success" onclick="saveSetData()">저장</button>
+                    <button class="btn btn-danger" onclick="resetSetData()">초기화</button>
+                </div>
+            </div>
+            <textarea id="set-editor"></textarea>
+            <div class="notice">
+                <strong>사용법:</strong> 세트 선택 → JSON 편집 → 저장 클릭
+            </div>
         </div>
+
+        <button class="add-btn" onclick="addModule()">+ 모듈 추가</button>
+        <div id="modules-container"></div>
     </div>
 
     <script>
         const sets = [
-            { name: '공세', type: 12, effect: 'ATK +45%', color: '#f44336' },
-            { name: '원천', type: 12, effect: 'HP +45%', color: '#4CAF50' },
-            { name: '강철', type: 12, effect: 'DEF +45%', color: '#FFC107' },
-            { name: '질주', type: 12, effect: 'SPD +35%', color: '#2196F3' },
-            { name: '수호', type: 12, effect: 'Effect RES +18% + DMG감소 55%', color: '#2196F3' },
-            { name: '전의', type: 12, effect: 'CRIT Rate +12% + 디버프당 DMG +6%', color: '#9C27B0' },
-            { name: '쐐기', type: 8, effect: 'DEF +10% + 반격 25%', color: '#FFC107' },
-            { name: '치유', type: 8, effect: 'HP +10% + 치유효과 +25%', color: '#4CAF50' },
-            { name: '진격', type: 8, effect: 'HP +10% + 면역 1턴', color: '#2196F3' },
-            { name: '처단', type: 8, effect: 'ATK +10% + HP 50%이상 방무 30%', color: '#f44336' },
-            { name: '광폭', type: 8, effect: 'ATK +10% + 크리시 DMG +12%', color: '#f44336' },
-            { name: '기세 추격', type: 12, effect: 'Effect ACC +18% + 스킬CD -1 (35%)', color: '#f44336' },
-            { name: '유혈 사태', type: 8, effect: 'ATK +10% + 추격 20%', color: '#FFC107' },
-            { name: '시공 지배', type: 12, effect: 'CRIT DMG +18% + 첫3타 DMG증가', color: '#2196F3' },
-            { name: '통찰', type: 12, effect: 'CRIT Rate +12%, CRIT DMG +20%', color: '#f44336' },
-            { name: '폭렬 칼날', type: 8, effect: 'SPD +15%, Effect ACC +20%', color: '#f44336' },
-            { name: '역병', type: 8, effect: 'HP +25%, Effect ACC +20%', color: '#9C27B0' },
-            { name: '철벽', type: 8, effect: 'DEF +25%, Effect RES +20%', color: '#FFC107' },
-            { name: '급습 공격', type: 8, effect: 'SPD +15%, ATK +20%', color: '#2196F3' },
-            { name: '섬광 타격', type: 8, effect: 'DEF +10% + 피격시 턴미터 +10%', color: '#9C27B0' },
-            { name: '진화 보호', type: 8, effect: 'Healing +12%, Effect RES +20%', color: '#4CAF50' }
+            { name: '공세', type: 12, color: '#f44336' },
+            { name: '원천', type: 12, color: '#4CAF50' },
+            { name: '강철', type: 12, color: '#FFC107' },
+            { name: '질주', type: 12, color: '#2196F3' },
+            { name: '수호', type: 12, color: '#9C27B0' },
+            { name: '전의', type: 12, color: '#E91E63' },
+            { name: '자기', type: 8, color: '#FFC107' },
+            { name: '치유', type: 8, color: '#4CAF50' },
+            { name: '진격', type: 8, color: '#2196F3' },
+            { name: '처단', type: 8, color: '#f44336' },
+            { name: '광폭', type: 8, color: '#f44336' },
+            { name: '기세 추격', type: 12, color: '#f44336' },
+            { name: '유혈 사태', type: 8, color: '#FFC107' },
+            { name: '시공 지배', type: 12, color: '#2196F3' },
+            { name: '통찰', type: 12, color: '#f44336' },
+            { name: '폭렬 칼날', type: 8, color: '#f44336' },
+            { name: '역병', type: 8, color: '#9C27B0' },
+            { name: '철벽', type: 8, color: '#FFC107' },
+            { name: '급습 공격', type: 8, color: '#2196F3' },
+            { name: '섬광 타격', type: 8, color: '#9C27B0' },
+            { name: '진화 보호', type: 8, color: '#4CAF50' }
         ];
 
-        const slots = ['마스크', '트랜지스터', '반지', '코어'];
-
-        const mainStats = {
-            '마스크': ['깡공'],
-            '트랜지스터': ['깡체'],
-            '반지': ['깡방'],
-            '코어': ['공격력%', '방어력%', 'HP%', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항']
-        };
-
-        const availableSubstats = {
-            '마스크': ['깡체', '공격력%', '깡방', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
-            '트랜지스터': ['HP%', '깡공', '깡방', '속도', '치명타 확률', '치명타 피해', '효과 저항'],
-            '반지': ['깡체', '깡공', '방어력%', '속도', '치명타 확률', '효과 명중', '효과 저항'],
-            '코어': ['깡체', 'HP%', '깡공', '공격력%', '깡방', '방어력%', '속도', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항']
-        };
-
-        const allSubstats = [
-            '깡체', 'HP%', '깡공', '공격력%', '깡방', 
-            '방어력%', '속도', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항'
-        ];
-
-        const goodStats = {
+        const originalGoodStats = {
             '공세': {
                 '마스크': ['공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
                 '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
                 '반지': ['깡공', '속도', '치명타 확률', '효과 명중'],
-                '코어': ['깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중']
+                '코어': {
+                    '공격력%': ['깡공', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
+                    'default': ['깡공', '속도']
+                }
             },
             '원천': {
                 '마스크': ['깡체', '속도', '효과 명중'],
@@ -574,143 +114,252 @@ html = r"""<!DOCTYPE html>
                 '코어': {
                     'HP%': ['깡체', '방어력%', '속도', '효과 명중', '효과 저항'],
                     '방어력%': ['깡체', 'HP%', '속도', '효과 명중', '효과 저항'],
-                    '효과 명중': ['깡체', 'HP%', '방어력%', '속도', '효과 저항'],
-                    '효과 저항': ['깡체', 'HP%', '방어력%', '속도', '효과 명중'],
-                    'default': ['깡체', 'HP%', '방어력%', '속도', '효과 명중', '효과 저항']
+                    'default': ['깡체', 'HP%', '속도']
                 }
             },
             '강철': {
                 '마스크': ['깡체', '속도', '효과 명중'],
                 '트랜지스터': ['HP%', '속도'],
                 '반지': ['깡체', '방어력%', '속도', '효과 명중'],
-                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중']
+                '코어': {
+                    '방어력%': ['깡체', 'HP%', '깡방', '속도', '효과 명중'],
+                    'HP%': ['깡체', '깡방', '방어력%', '속도', '효과 명중'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '질주': {
                 '마스크': ['깡체', '속도', '효과 명중'],
                 '트랜지스터': ['HP%', '속도'],
                 '반지': ['깡체', '속도', '효과 명중'],
-                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중']
+                '코어': {
+                    '공격력%': ['HP%', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '수호': {
                 '마스크': ['깡체', '속도', '효과 명중'],
                 '트랜지스터': ['HP%', '속도', '효과 저항'],
                 '반지': ['깡체', '방어력%', '속도', '효과 저항'],
-                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 저항']
+                '코어': {
+                    'HP%': ['깡체', '깡방', '방어력%', '속도', '효과 저항'],
+                    '방어력%': ['깡체', 'HP%', '깡방', '속도', '효과 저항'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '전의': {
                 '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
                 '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
                 '반지': ['깡체', '깡공', '속도', '치명타 확률'],
-                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+                '코어': {
+                    '공격력%': ['깡체', 'HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                    'HP%': ['깡체', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
-            '쐐기': {
+            '자기': {
                 '마스크': ['깡체', '속도', '효과 명중'],
                 '트랜지스터': ['HP%', '속도'],
                 '반지': ['깡체', '방어력%', '속도', '효과 명중'],
-                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 명중']
+                '코어': {
+                    '방어력%': ['깡체', 'HP%', '깡방', '속도', '효과 명중'],
+                    'HP%': ['깡체', '깡방', '방어력%', '속도', '효과 명중'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '치유': {
                 '마스크': ['깡체', '속도'],
                 '트랜지스터': ['HP%', '속도'],
                 '반지': ['깡체', '방어력%', '속도'],
-                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도']
+                '코어': {
+                    'HP%': ['깡체', '깡방', '방어력%', '속도'],
+                    '방어력%': ['깡체', 'HP%', '깡방', '속도'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '진격': {
                 '마스크': ['깡체', '속도'],
                 '트랜지스터': ['HP%', '속도'],
                 '반지': ['깡체', '방어력%', '속도'],
-                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도']
+                '코어': {
+                    'HP%': ['깡체', '깡방', '방어력%', '속도'],
+                    '방어력%': ['깡체', 'HP%', '깡방', '속도'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '처단': {
                 '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
                 '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
                 '반지': ['깡체', '깡공', '속도', '치명타 확률'],
-                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+                '코어': {
+                    '공격력%': ['깡체', 'HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                    'HP%': ['깡체', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '광폭': {
                 '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
                 '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
                 '반지': ['깡체', '깡공', '속도', '치명타 확률'],
-                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+                '코어': {
+                    '공격력%': ['깡체', 'HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                    'HP%': ['깡체', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '기세 추격': {
                 '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
                 '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
                 '반지': ['깡체', '깡공', '속도', '치명타 확률', '효과 명중'],
-                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중']
+                '코어': {
+                    '공격력%': ['깡체', 'HP%', '깡공', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
+                    'HP%': ['깡체', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해', '효과 명중'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '유혈 사태': {
                 '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
                 '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
                 '반지': ['깡체', '깡공', '속도', '치명타 확률'],
-                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+                '코어': {
+                    '공격력%': ['깡체', 'HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
+                    'HP%': ['깡체', '깡공', '공격력%', '속도', '치명타 확률', '치명타 피해'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '시공 지배': {
                 '마스크': ['깡체', '속도', '효과 명중'],
                 '트랜지스터': ['HP%', '속도'],
                 '반지': ['깡체', '속도', '효과 명중'],
-                '코어': ['깡체', 'HP%', '속도', '효과 명중']
+                '코어': {
+                    '치명타 피해': ['깡체', 'HP%', '속도', '효과 명중'],
+                    'HP%': ['깡체', '속도', '치명타 피해', '효과 명중'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '통찰': {
                 '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '치명타 피해'],
                 '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률', '치명타 피해'],
                 '반지': ['깡체', '깡공', '속도', '치명타 확률'],
-                '코어': ['깡공', '공격력%', '속도', '치명타 확률', '치명타 피해']
+                '코어': {
+                    '공격력%': ['깡공', '속도', '치명타 확률', '치명타 피해'],
+                    '치명타 확률': ['깡공', '공격력%', '속도', '치명타 피해'],
+                    '치명타 피해': ['깡공', '공격력%', '속도', '치명타 확률'],
+                    'default': ['깡공', '속도']
+                }
             },
             '폭렬 칼날': {
                 '마스크': ['깡체', '공격력%', '속도', '치명타 확률', '효과 명중'],
                 '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률'],
                 '반지': ['깡체', '깡공', '속도', '치명타 확률', '효과 명중'],
-                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률', '효과 명중']
+                '코어': {
+                    '공격력%': ['깡체', 'HP%', '깡공', '속도', '치명타 확률', '효과 명중'],
+                    'HP%': ['깡체', '깡공', '공격력%', '속도', '치명타 확률', '효과 명중'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '역병': {
                 '마스크': ['깡체', '속도', '효과 명중'],
                 '트랜지스터': ['HP%', '속도'],
                 '반지': ['깡체', '속도', '효과 명중'],
-                '코어': ['깡체', 'HP%', '속도', '효과 명중']
+                '코어': {
+                    'HP%': ['깡체', '속도', '효과 명중'],
+                    '효과 명중': ['깡체', 'HP%', '속도'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '철벽': {
                 '마스크': ['깡체', '속도'],
                 '트랜지스터': ['HP%', '속도', '효과 저항'],
                 '반지': ['깡체', '방어력%', '속도', '효과 저항'],
-                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도', '효과 저항']
+                '코어': {
+                    '방어력%': ['깡체', 'HP%', '깡방', '속도', '효과 저항'],
+                    'HP%': ['깡체', '깡방', '방어력%', '속도', '효과 저항'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '급습 공격': {
                 '마스크': ['깡체', '공격력%', '속도', '치명타 확률'],
                 '트랜지스터': ['HP%', '깡공', '속도', '치명타 확률'],
                 '반지': ['깡체', '깡공', '속도', '치명타 확률'],
-                '코어': ['깡체', 'HP%', '깡공', '공격력%', '속도', '치명타 확률']
+                '코어': {
+                    '공격력%': ['깡체', 'HP%', '깡공', '속도', '치명타 확률'],
+                    'HP%': ['깡체', '깡공', '공격력%', '속도', '치명타 확률'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '섬광 타격': {
                 '마스크': ['깡체', '속도', '효과 명중'],
                 '트랜지스터': ['HP%', '속도'],
                 '반지': ['깡체', '속도', '효과 명중'],
-                '코어': ['깡체', 'HP%', '속도', '효과 명중']
+                '코어': {
+                    '방어력%': ['깡체', 'HP%', '속도', '효과 명중'],
+                    'HP%': ['깡체', '방어력%', '속도', '효과 명중'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             },
             '진화 보호': {
                 '마스크': ['깡체', '속도'],
                 '트랜지스터': ['HP%', '속도'],
                 '반지': ['깡체', '방어력%', '속도'],
-                '코어': ['깡체', 'HP%', '깡방', '방어력%', '속도']
+                '코어': {
+                    'HP%': ['깡체', '깡방', '방어력%', '속도'],
+                    '방어력%': ['깡체', 'HP%', '깡방', '속도'],
+                    'default': ['깡체', 'HP%', '속도']
+                }
             }
         };
 
+        let goodStats = JSON.parse(JSON.stringify(originalGoodStats));
         let modules = [];
         let nextId = 1;
-        let openDropdownId = null;
+
+        function initEditor() {
+            const selector = document.getElementById('set-selector');
+            Object.keys(goodStats).forEach(setName => {
+                const option = document.createElement('option');
+                option.value = setName;
+                option.textContent = setName;
+                selector.appendChild(option);
+            });
+            loadSetData();
+        }
+
+        function loadSetData() {
+            const setName = document.getElementById('set-selector').value;
+            document.getElementById('set-editor').value = JSON.stringify(goodStats[setName], null, 2);
+        }
+
+        function saveSetData() {
+            const setName = document.getElementById('set-selector').value;
+            try {
+                goodStats[setName] = JSON.parse(document.getElementById('set-editor').value);
+                alert('저장 완료!');
+                renderModules();
+            } catch (e) {
+                alert('JSON 오류: ' + e.message);
+            }
+        }
+
+        function resetSetData() {
+            const setName = document.getElementById('set-selector').value;
+            if (confirm(`'${setName}' 세트를 초기값으로 되돌리시겠습니까?\n\n예: 초기화 진행\n아니오: 취소`)) {
+                goodStats[setName] = JSON.parse(JSON.stringify(originalGoodStats[setName]));
+                loadSetData();
+                alert('초기화 완료!');
+                renderModules();
+            }
+        }
 
         function addModule() {
-            const module = {
+            modules.push({
                 id: nextId++,
                 set: '공세',
                 slot: '마스크',
                 mainStat: '깡공',
                 matrix: 2,
                 substatCount: 3,
-                substats: {},
-                searchText: ''
-            };
-            modules.push(module);
+                substats: {}
+            });
             renderModules();
         }
 
@@ -719,352 +368,104 @@ html = r"""<!DOCTYPE html>
             renderModules();
         }
 
-        function updateSet(id, setName) {
-            const module = modules.find(m => m.id === id);
-            if (module) {
-                module.set = setName;
-                module.substats = {};
-                module.searchText = '';
-                openDropdownId = null;
-                renderModules();
-            }
-        }
-
-        function updateSlot(id, slot) {
-            const module = modules.find(m => m.id === id);
-            if (module) {
-                module.slot = slot;
-                module.mainStat = mainStats[slot][0];
-                module.substats = {};
-                renderModules();
-            }
-        }
-
-        function updateMainStat(id, stat) {
-            const module = modules.find(m => m.id === id);
-            if (module) {
-                module.mainStat = stat;
-                module.substats = {};
-                renderModules();
-            }
-        }
-
-        function updateSearchText(id, text) {
-            const module = modules.find(m => m.id === id);
-            if (module) {
-                module.searchText = text;
-                openDropdownId = id;
-                renderModules();
-            }
-        }
-
-        function toggleDropdown(id) {
-            openDropdownId = openDropdownId === id ? null : id;
-            renderModules();
-        }
-
-        function closeDropdown() {
-            openDropdownId = null;
-            renderModules();
-        }
-
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.set-search-wrapper')) {
-                if (openDropdownId !== null) {
-                    closeDropdown();
-                }
-            }
-        });
-
-        function updateMatrix(id, matrix) {
-            const module = modules.find(m => m.id === id);
-            if (module) {
-                module.matrix = parseInt(matrix);
-                renderModules();
-            }
-        }
-
-        function updateSubstatCount(id, count) {
-            const module = modules.find(m => m.id === id);
-            if (module) {
-                module.substatCount = parseInt(count);
-                module.substats = {};
-                renderModules();
-            }
-        }
-
         function toggleSubstat(id, stat) {
             const module = modules.find(m => m.id === id);
             if (module) {
-                const selectedCount = Object.values(module.substats).filter(v => v).length;
-                
+                const selected = Object.values(module.substats).filter(v => v).length;
                 if (module.substats[stat]) {
                     module.substats[stat] = false;
-                } else if (selectedCount < module.substatCount) {
+                } else if (selected < module.substatCount) {
                     module.substats[stat] = true;
                 }
-                
                 renderModules();
             }
         }
 
-        // ====== evaluateModule (수정된 버전) ======
         function evaluateModule(module) {
-            const selectedStats = Object.keys(module.substats).filter(s => module.substats[s]);
-            const totalCount = selectedStats.length;
-
-            if (totalCount === 0) {
-                return { status: 'empty', text: '옵션 미선택' };
+            const selected = Object.keys(module.substats).filter(s => module.substats[s]);
+            if (selected.length === 0) return { status: 'empty', text: '옵션 미선택' };
+            
+            let good = goodStats[module.set]?.[module.slot] || [];
+            if (module.slot === '코어' && typeof good === 'object') {
+                good = good[module.mainStat] || good['default'] || [];
             }
-
-            if (module.substatCount < 3) {
-                return { status: 'sell', text: '판매 (능력치 부족)' };
-            }
-
-            const currentSet = sets.find(s => s.name === module.set);
-            // good 목록을 슬롯 기준으로 가져오기 (코어는 주스텟 고려)
-            let goodStatsForSlot = goodStats[module.set]?.[module.slot];
-            let good = [];
-
-            if (module.slot === '코어' && typeof goodStatsForSlot === 'object' && !Array.isArray(goodStatsForSlot)) {
-                // 코어인 경우 주스텟별로 매핑된 객체일 수 있음
-                good = goodStatsForSlot[module.mainStat] || goodStatsForSlot['default'] || [];
-            } else {
-                good = goodStatsForSlot || [];
-            }
-
-            // 코어 주스텟 유효성 체크: 주스텟 자체가 해당 세트에서 유효한 주스텟인지 확인
-            if (module.slot === '코어') {
-                const allGoodStats = Array.isArray(goodStatsForSlot) ? goodStatsForSlot : (goodStatsForSlot?.['default'] || []);
-                let mainStatValid = false;
-                for (let stat of allGoodStats) {
-                    if (module.mainStat === '공격력%' && (stat === '공격력%' || stat === '깡공')) { mainStatValid = true; break; }
-                    if (module.mainStat === 'HP%' && (stat === 'HP%' || stat === '깡체')) { mainStatValid = true; break; }
-                    if (module.mainStat === '방어력%' && (stat === '방어력%' || stat === '깡방')) { mainStatValid = true; break; }
-                    if (stat === module.mainStat) { mainStatValid = true; break; }
-                }
-                if (!mainStatValid) {
-                    // 주스텟이 유효하지 않으면 부옵 전부 비유효 처리
-                    good = [];
-                } else {
-                    // 주스텟이 유효하면 주스텟과 동일한 항목은 제외
-                    good = good.filter(stat => {
-                        if (module.mainStat === '공격력%' && stat === '공격력%') return false;
-                        if (module.mainStat === 'HP%' && stat === 'HP%') return false;
-                        if (module.mainStat === '방어력%' && stat === '방어력%') return false;
-                        return stat !== module.mainStat;
-                    });
-                }
-            }
-
-            // goodCount 계산
-            const goodCount = selectedStats.filter(s => good.includes(s)).length;
-
-            // 평가 로직 (원래 알고리즘 유지)
-            if (currentSet.type === 12) {
-                const isException = ['질주', '유혈 사태', '기세 추격'].includes(module.set);
-
-                if (module.matrix === 3) {
-                    if (module.substatCount === 4) {
-                        if (goodCount >= 3) return { status: 'keep', text: '보관 (메인)' };
-                        return { status: 'sell', text: '판매' };
-                    }
-                    // 부가 능력치 3개
-                    if (goodCount === 3) return { status: 'keep', text: '보관 (메인)' };
-                    return { status: 'sell', text: '판매' };
-                } else if (module.matrix === 2) {
-                    if (!isException) return { status: 'sell', text: '판매 (매트릭스 낮음)' };
-
-                    if (module.substatCount === 4) {
-                        if (goodCount >= 3) return { status: 'keep', text: '보관 (서브)' };
-                        return { status: 'sell', text: '판매' };
-                    }
-                    // 부가 능력치 3개
-                    if (goodCount === 3) return { status: 'keep', text: '보관 (서브)' };
-                    return { status: 'sell', text: '판매' };
-                }
-            }
-
-            if (currentSet.type === 8) {
-                if (module.matrix === 3) {
-                    if (module.substatCount === 4) {
-                        if (goodCount >= 3) return { status: 'keep', text: '보관 (메인)' };
-                        return { status: 'sell', text: '판매' };
-                    }
-                    // 부가 능력치 3개
-                    if (goodCount === 3) return { status: 'keep', text: '보관 (메인)' };
-                    return { status: 'sell', text: '판매' };
-                } else if (module.matrix === 2) {
-                    if (module.substatCount === 4) {
-                        if (goodCount >= 3) return { status: 'keep', text: '보관 (서브)' };
-                        return { status: 'sell', text: '판매' };
-                    }
-                    // 부가 능력치 3개
-                    if (goodCount === 3) return { status: 'keep', text: '보관 (서브)' };
-                    return { status: 'sell', text: '판매' };
-                }
-            }
-
-            return { status: 'sell', text: '판매 추천' };
+            
+            const goodCount = selected.filter(s => good.includes(s)).length;
+            
+            if (module.substatCount === 4 && goodCount >= 3) return { status: 'keep', text: '보관' };
+            if (module.substatCount === 3 && goodCount === 3) return { status: 'keep', text: '보관' };
+            return { status: 'sell', text: '판매' };
         }
-        // ====== evaluateModule end ======
 
         function renderModules() {
             const container = document.getElementById('modules-container');
-            
             if (modules.length === 0) {
-                container.innerHTML = '<div class="empty-state">모듈을 추가하여 시작하세요</div>';
+                container.innerHTML = '<div class="empty-state">모듈을 추가하세요</div>';
                 return;
             }
             
-            container.innerHTML = modules.map(module => {
-                const evaluation = evaluateModule(module);
-                let goodStatsForSlot = goodStats[module.set]?.[module.slot];
-                
-                // 코어이고 주 스텟별 유효 옵션이 있는 경우
-                let good = [];
-                if (module.slot === '코어' && typeof goodStatsForSlot === 'object' && !Array.isArray(goodStatsForSlot)) {
-                    good = goodStatsForSlot[module.mainStat] || goodStatsForSlot['default'] || [];
-                } else {
-                    good = goodStatsForSlot || [];
+            container.innerHTML = modules.map(m => {
+                const eval = evaluateModule(m);
+                let good = goodStats[m.set]?.[m.slot] || [];
+                if (m.slot === '코어' && typeof good === 'object') {
+                    good = good[m.mainStat] || good['default'] || [];
                 }
                 
-                // 코어인 경우 주 스텟 체크
-                if (module.slot === '코어') {
-                    const allGoodStats = Array.isArray(goodStatsForSlot) ? goodStatsForSlot : (goodStatsForSlot?.['default'] || []);
-                    
-                    // 주 스텟이 유효 옵션이 아니면 부옵션 전부 비유효 처리
-                    const mainStatValid = allGoodStats.some(stat => {
-                        if (module.mainStat === '공격력%' && (stat === '공격력%' || stat === '깡공')) return true;
-                        if (module.mainStat === 'HP%' && (stat === 'HP%' || stat === '깡체')) return true;
-                        if (module.mainStat === '방어력%' && (stat === '방어력%' || stat === '깡방')) return true;
-                        return stat === module.mainStat;
-                    });
-                    
-                    if (!mainStatValid) {
-                        // 주 스텟이 비유효면 부옵션 전부 비유효
-                        good = [];
-                    } else {
-                        // 주 스텟이 유효하면 주 스텟과 같은 것만 제외
-                        good = good.filter(stat => {
-                            if (module.mainStat === '공격력%' && stat === '공격력%') return false;
-                            if (module.mainStat === 'HP%' && stat === 'HP%') return false;
-                            if (module.mainStat === '방어력%' && stat === '방어력%') return false;
-                            return stat !== module.mainStat;
-                        });
-                    }
-                }
-                
-                const selectedCount = Object.values(module.substats).filter(v => v).length;
-                const currentSet = sets.find(s => s.name === module.set);
-                
-                const searchLower = module.searchText.toLowerCase();
-                const filteredSets = sets.filter(set => 
-                    set.name.toLowerCase().includes(searchLower)
-                );
-                const isDropdownOpen = openDropdownId === module.id;
-                
-                const availableSubs = availableSubstats[module.slot];
-                let validSubstats = availableSubs;
-                if (module.slot === '코어') {
-                    validSubstats = availableSubs.filter(stat => stat !== module.mainStat);
-                }
+                const allStats = ['깡체', 'HP%', '깡공', '공격력%', '깡방', '방어력%', '속도', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항'];
                 
                 return `
-                    <div class="module-card ${evaluation.status}">
+                    <div class="module-card ${eval.status}">
                         <div class="module-header">
                             <div class="module-info">
-                                <div class="set-search-wrapper">
-                                    <div class="set-color-box" style="background: ${currentSet.color};"></div>
-                                    <input 
-                                        type="text" 
-                                        class="set-search-input" 
-                                        placeholder="세트 검색..."
-                                        value="${module.searchText === '' ? currentSet.name : module.searchText}"
-                                        onfocus="this.select(); toggleDropdown(${module.id})"
-                                        oninput="updateSearchText(${module.id}, this.value); event.stopPropagation();"
-                                        onkeydown="event.stopPropagation();"
-                                    />
-                                    <div class="set-dropdown ${isDropdownOpen ? 'show' : ''}">
-                                        ${filteredSets.map(set => `
-                                            <div 
-                                                class="set-dropdown-item ${module.set === set.name ? 'selected' : ''}"
-                                                onclick="updateSet(${module.id}, '${set.name}')"
-                                            >
-                                                <div class="set-color-indicator" style="background: ${set.color};"></div>
-                                                <span>${set.name}</span>
-                                            </div>
-                                        `).join('')}
-                                        ${filteredSets.length === 0 ? '<div class="set-dropdown-item" style="color: #999;">검색 결과 없음</div>' : ''}
-                                    </div>
+                                <div class="select-wrapper">
+                                    <div class="select-label">세트</div>
+                                    <select onchange="modules.find(x=>x.id===${m.id}).set=this.value; renderModules();">
+                                        ${Object.keys(goodStats).map(s => `<option ${m.set===s?'selected':''}>${s}</option>`).join('')}
+                                    </select>
                                 </div>
-
                                 <div class="select-wrapper">
                                     <div class="select-label">부위</div>
-                                    <select onchange="updateSlot(${module.id}, this.value)">
-                                        ${slots.map(slot => `
-                                            <option value="${slot}" ${module.slot === slot ? 'selected' : ''}>${slot}</option>
-                                        `).join('')}
+                                    <select onchange="modules.find(x=>x.id===${m.id}).slot=this.value; modules.find(x=>x.id===${m.id}).mainStat='깡공'; renderModules();">
+                                        ${['마스크','트랜지스터','반지','코어'].map(s => `<option ${m.slot===s?'selected':''}>${s}</option>`).join('')}
                                     </select>
                                 </div>
-
-                                ${module.slot === '코어' ? `
-                                    <div class="select-wrapper">
-                                        <div class="select-label">주 스텟</div>
-                                        <select onchange="updateMainStat(${module.id}, this.value)" style="min-width: 120px;">
-                                            ${mainStats['코어'].map(stat => `
-                                                <option value="${stat}" ${module.mainStat === stat ? 'selected' : ''}>${stat}</option>
-                                            `).join('')}
-                                        </select>
-                                    </div>
+                                ${m.slot === '코어' ? `
+                                <div class="select-wrapper">
+                                    <div class="select-label">주옵션</div>
+                                    <select onchange="modules.find(x=>x.id===${m.id}).mainStat=this.value; modules.find(x=>x.id===${m.id}).substats={}; renderModules();">
+                                        ${['공격력%','방어력%','HP%','치명타 확률','치명타 피해','효과 명중','효과 저항'].map(s => `<option ${m.mainStat===s?'selected':''}>${s}</option>`).join('')}
+                                    </select>
+                                </div>
                                 ` : ''}
-                                
                                 <div class="select-wrapper">
                                     <div class="select-label">매트릭스</div>
-                                    <select onchange="updateMatrix(${module.id}, this.value)">
-                                        ${[2,3].map(num => `
-                                            <option value="${num}" ${module.matrix === num ? 'selected' : ''}>${num}</option>
-                                        `).join('')}
+                                    <select onchange="modules.find(x=>x.id===${m.id}).matrix=+this.value; renderModules();">
+                                        <option ${m.matrix===2?'selected':''}>2</option>
+                                        <option ${m.matrix===3?'selected':''}>3</option>
                                     </select>
                                 </div>
-
                                 <div class="select-wrapper">
                                     <div class="select-label">부가 능력치</div>
-                                    <select onchange="updateSubstatCount(${module.id}, this.value)">
-                                        ${[3,4].map(num => `
-                                            <option value="${num}" ${module.substatCount === num ? 'selected' : ''}>${num}</option>
-                                        `).join('')}
+                                    <select onchange="modules.find(x=>x.id===${m.id}).substatCount=+this.value; modules.find(x=>x.id===${m.id}).substats={}; renderModules();">
+                                        <option ${m.substatCount===3?'selected':''}>3</option>
+                                        <option ${m.substatCount===4?'selected':''}>4</option>
                                     </select>
                                 </div>
-                                
-                                <div class="status-badge ${evaluation.status}">
-                                    ${evaluation.text}
-                                </div>
+                                <div class="status-badge ${eval.status}">${eval.text}</div>
                             </div>
-                            
-                            <button class="remove-btn" onclick="removeModule(${module.id})">삭제</button>
+                            <button class="remove-btn" onclick="removeModule(${m.id})">삭제</button>
                         </div>
-
                         <div class="main-stat-info">
-                            주 스텟: ${module.mainStat} | 세트 효과 (${currentSet.type}피스): ${currentSet.effect}
+                            세트: ${m.set} | 부위: ${m.slot}${m.slot === '코어' ? ` | 주옵션: ${m.mainStat}` : ''}
                         </div>
-                        
                         <div class="substats-grid">
-                            ${allSubstats.map(stat => {
-                                const isAvailable = validSubstats.includes(stat);
+                            ${allStats.map(stat => {
                                 const isGood = good.includes(stat);
-                                const isSelected = module.substats[stat];
-                                const isDisabled = !isSelected && selectedCount >= module.substatCount;
-                                
-                                return `
-                                    <button 
-                                        class="substat-btn ${isGood ? 'good' : 'bad'} ${isSelected ? 'selected' : ''} ${!isAvailable ? 'hidden' : ''}"
-                                        onclick="toggleSubstat(${module.id}, '${stat}')"
-                                        ${isDisabled || !isAvailable ? 'disabled' : ''}
-                                    >
-                                        ${stat}
-                                    </button>
-                                `;
+                                const isSelected = m.substats[stat];
+                                const selectedCount = Object.values(m.substats).filter(v=>v).length;
+                                const isDisabled = !isSelected && selectedCount >= m.substatCount;
+                                return `<button class="substat-btn ${isGood?'good':'bad'} ${isSelected?'selected':''}" 
+                                        onclick="toggleSubstat(${m.id},'${stat}')" ${isDisabled?'disabled':''}>${stat}</button>`;
                             }).join('')}
                         </div>
                     </div>
@@ -1072,15 +473,8 @@ html = r"""<!DOCTYPE html>
             }).join('');
         }
 
+        initEditor();
         renderModules();
     </script>
 </body>
 </html>
-"""
-
-path = "/mnt/data/etheria_module_guide (2).html"
-with open(path, "w", encoding="utf-8") as f:
-    f.write(html)
-
-print(f"Wrote corrected HTML to: {path}")
-
