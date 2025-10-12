@@ -52,6 +52,9 @@
             <h1>에테리아 모듈 판매 체크</h1>
         </header>
 
+        <button class="add-btn" onclick="addModule()">+ 모듈 추가</button>
+        <div id="modules-container"></div>
+
         <div class="editor-section">
             <div class="editor-header">
                 <h2>세트별 유효옵션 편집</h2>
@@ -67,9 +70,6 @@
                 <strong>사용법:</strong> 세트 선택 → JSON 편집 → 저장 클릭
             </div>
         </div>
-
-        <button class="add-btn" onclick="addModule()">+ 모듈 추가</button>
-        <div id="modules-container"></div>
     </div>
 
     <script>
@@ -310,6 +310,28 @@
         };
 
         let goodStats = JSON.parse(JSON.stringify(originalGoodStats));
+
+        // 로컬 스토리지에서 불러오기
+        function loadFromStorage() {
+            const saved = localStorage.getItem('etheriaGoodStats');
+            if (saved) {
+                try {
+                    goodStats = JSON.parse(saved);
+                    console.log('저장된 데이터 불러오기 완료');
+                } catch (e) {
+                    console.error('저장된 데이터 불러오기 실패:', e);
+                    goodStats = JSON.parse(JSON.stringify(originalGoodStats));
+                }
+            }
+        }
+
+        // 로컬 스토리지에 저장
+        function saveToStorage() {
+            localStorage.setItem('etheriaGoodStats', JSON.stringify(goodStats));
+        }
+
+        // 페이지 로드 시 자동 불러오기
+        loadFromStorage();
         let modules = [];
         let nextId = 1;
 
@@ -333,7 +355,8 @@
             const setName = document.getElementById('set-selector').value;
             try {
                 goodStats[setName] = JSON.parse(document.getElementById('set-editor').value);
-                alert('저장 완료!');
+                saveToStorage(); // 로컬 스토리지에 저장
+                alert('저장 완료! (브라우저에 영구 저장됨)');
                 renderModules();
             } catch (e) {
                 alert('JSON 오류: ' + e.message);
@@ -344,6 +367,7 @@
             const setName = document.getElementById('set-selector').value;
             if (confirm(`'${setName}' 세트를 초기값으로 되돌리시겠습니까?\n\n예: 초기화 진행\n아니오: 취소`)) {
                 goodStats[setName] = JSON.parse(JSON.stringify(originalGoodStats[setName]));
+                saveToStorage(); // 로컬 스토리지에 저장
                 loadSetData();
                 alert('초기화 완료!');
                 renderModules();
