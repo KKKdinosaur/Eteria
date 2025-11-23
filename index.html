@@ -486,9 +486,8 @@
         let customColorOptions = {}; // 사용자 정의 색상별 옵션
         let pollInterval = null; // 폴링 인터벌
 
-        // 페이지 로드 시 저장된 설정 불러오기 (JSONBin.io에서 불러오기)
+        // 페이지 로드 시 저장된 설정 불러오기
         async function loadCustomOptions() {
-            console.log('🔄 JSONBin에서 설정 로드 시작...');
             try {
                 const response = await fetch(`${JSONBIN_URL}/latest`, {
                     method: 'GET',
@@ -500,37 +499,27 @@
                 if (response.ok) {
                     const result = await response.json();
                     customColorOptions = result.record;
-                    console.log('✅ JSONBin에서 로드 완료:', customColorOptions);
-                    // 로컬에도 백업
                     localStorage.setItem('custom-color-options', JSON.stringify(customColorOptions));
                 } else {
-                    console.log('⚠️ JSONBin 로드 실패, 로컬 저장소 확인');
-                    // JSONBin 실패시 로컬 저장소에서 로드
                     const savedData = localStorage.getItem('custom-color-options');
                     if (savedData) {
                         customColorOptions = JSON.parse(savedData);
-                        console.log('✅ 로컬에서 로드 완료');
                     } else {
                         customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
-                        console.log('⚠️ 기본값 사용');
                     }
                 }
             } catch (error) {
-                console.log('❌ 로드 에러:', error);
-                // 에러 발생시 로컬 저장소에서 로드
                 const savedData = localStorage.getItem('custom-color-options');
                 if (savedData) {
                     customColorOptions = JSON.parse(savedData);
-                    console.log('✅ 로컬에서 로드 완료 (에러 복구)');
                 } else {
                     customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
-                    console.log('⚠️ 기본값 사용 (에러 복구)');
                 }
             }
             updateSubOptions();
         }
 
-        // 주기적으로 변경사항 확인 (10초마다 JSONBin에서 확인)
+        // 주기적으로 변경사항 확인
         function startPolling() {
             if (pollInterval) clearInterval(pollInterval);
             
@@ -547,26 +536,21 @@
                         const result = await response.json();
                         const newOptions = result.record;
                         
-                        // 변경사항이 있으면 업데이트
                         if (JSON.stringify(newOptions) !== JSON.stringify(customColorOptions)) {
                             customColorOptions = newOptions;
                             updateSubOptions();
-                            console.log('🔄 다른 사용자의 변경사항 반영됨');
-                            // 로컬에도 백업
                             localStorage.setItem('custom-color-options', JSON.stringify(customColorOptions));
                         }
                     }
                 } catch (error) {
-                    console.log('폴링 에러:', error);
+                    // 네트워크 에러 무시
                 }
-            }, 10000); // 10초마다
+            }, 10000);
         }
 
-        // 커스텀 옵션 저장 (JSONBin.io에 저장)
+        // 커스텀 옵션 저장
         async function saveCustomOptions() {
             try {
-                console.log('💾 JSONBin에 저장 시도 중...', customColorOptions);
-                
                 const response = await fetch(JSONBIN_URL, {
                     method: 'PUT',
                     headers: {
@@ -577,17 +561,12 @@
                 });
 
                 if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ JSONBin 저장 완료:', result);
-                    // 로컬에도 백업 저장
                     localStorage.setItem('custom-color-options', JSON.stringify(customColorOptions));
                     return true;
-                } else {
-                    console.error('❌ JSONBin 저장 실패:', response.status);
-                    return false;
                 }
+                return false;
             } catch (error) {
-                console.error('❌ 저장 에러:', error);
+                console.error('저장 실패:', error);
                 return false;
             }
         }
@@ -626,21 +605,14 @@
             updateSubOptions();
         });
 
-        // 부옵션 클릭 이벤트 (토글)
+        // 부옵션 클릭 이벤트
         function toggleOption(optionName) {
-            console.log(`🖱️ ${optionName} 클릭됨`);
-            
-            if (!selectedColor || !selectedMainOption) {
-                console.log('❌ 색상 또는 주옵션 미선택');
-                return;
-            }
+            if (!selectedColor || !selectedMainOption) return;
 
-            // 현재 색상의 커스텀 옵션 객체 초기화
             if (!customColorOptions[selectedColor]) {
                 customColorOptions[selectedColor] = {};
             }
             
-            // 현재 주옵션의 배열 초기화
             if (!customColorOptions[selectedColor][selectedMainOption]) {
                 if (defaultColorGoodOptions[selectedColor] && defaultColorGoodOptions[selectedColor][selectedMainOption]) {
                     customColorOptions[selectedColor][selectedMainOption] = [...defaultColorGoodOptions[selectedColor][selectedMainOption]];
@@ -653,28 +625,13 @@
             const index = currentOptions.indexOf(optionName);
 
             if (index > -1) {
-                // 이미 있으면 제거 (빨간색으로 변경)
                 currentOptions.splice(index, 1);
-                console.log(`🔴 ${optionName}를 좋은 옵션에서 제거`);
             } else {
-                // 없으면 추가 (녹색으로 변경)
                 currentOptions.push(optionName);
-                console.log(`🟢 ${optionName}를 좋은 옵션에 추가`);
             }
 
-            // 화면 먼저 업데이트
             updateSubOptions();
-            
-            // 저장
-            console.log('💾 저장 시작...');
-            saveCustomOptions().then(saved => {
-                if (saved) {
-                    console.log(`✅ 토글 완료: ${selectedColor} / ${selectedMainOption} / ${optionName}`);
-                    console.log('현재 좋은 옵션:', currentOptions);
-                } else {
-                    console.error('❌ 저장 실패');
-                }
-            });
+            saveCustomOptions();
         }
 
         // 부옵션 표시 업데이트
@@ -693,23 +650,16 @@
 
             const subOptions = mainOptionData[selectedMainOption];
             const goodOptions = getColorGoodOptions(selectedColor);
-
             let html = '';
+            
             subOptions.forEach(option => {
-                let cssClass = 'bad'; // 기본값은 빨간색
-                
-                // 좋은 옵션인지 확인
-                if (goodOptions.includes(option)) {
-                    cssClass = 'good';
-                }
-
+                const cssClass = goodOptions.includes(option) ? 'good' : 'bad';
                 html += `<span class="sub-option-item ${cssClass}" onclick="toggleOption('${option}')">${option}</span>`;
             });
 
             display.innerHTML = html;
         }
 
-        // 페이지 로드 시 설정 불러오기 및 폴링 시작
         loadCustomOptions().then(() => {
             startPolling();
         });
