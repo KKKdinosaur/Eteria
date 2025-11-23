@@ -482,22 +482,25 @@
         let pollInterval = null; // 폴링 인터벌
 
         // 페이지 로드 시 저장된 설정 불러오기
-        async function loadCustomOptions() {
+        function loadCustomOptions() {
+            console.log('🔄 설정 로드 시작...');
             try {
-                const result = await window.storage.get('custom-color-options', true);
-                if (result && result.value) {
-                    customColorOptions = JSON.parse(result.value);
-                    console.log('커스텀 옵션 로드 완료:', customColorOptions);
+                const savedData = localStorage.getItem('custom-color-options');
+                console.log('로드 결과:', savedData);
+                
+                if (savedData) {
+                    customColorOptions = JSON.parse(savedData);
+                    console.log('✅ 커스텀 옵션 로드 완료:', customColorOptions);
                 } else {
                     // 저장된 값이 없으면 기본값으로 초기화하고 저장
+                    console.log('⚠️ 저장된 설정 없음, 기본값 사용');
                     customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
-                    await saveCustomOptions();
-                    console.log('기본값으로 초기화 및 저장 완료');
+                    saveCustomOptions();
                 }
             } catch (error) {
-                console.log('저장된 설정 로드 실패, 기본값 사용:', error);
+                console.log('❌ 저장된 설정 로드 실패:', error);
                 customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
-                await saveCustomOptions();
+                saveCustomOptions();
             }
             updateSubOptions();
         }
@@ -506,11 +509,11 @@
         function startPolling() {
             if (pollInterval) clearInterval(pollInterval);
             
-            pollInterval = setInterval(async () => {
+            pollInterval = setInterval(() => {
                 try {
-                    const result = await window.storage.get('custom-color-options', true);
-                    if (result && result.value) {
-                        const newOptions = JSON.parse(result.value);
+                    const savedData = localStorage.getItem('custom-color-options');
+                    if (savedData) {
+                        const newOptions = JSON.parse(savedData);
                         // 변경사항이 있으면 업데이트
                         if (JSON.stringify(newOptions) !== JSON.stringify(customColorOptions)) {
                             customColorOptions = newOptions;
@@ -525,14 +528,17 @@
         }
 
         // 커스텀 옵션 저장
-        async function saveCustomOptions() {
+        function saveCustomOptions() {
             try {
+                console.log('저장 시도 중...', customColorOptions);
                 const jsonString = JSON.stringify(customColorOptions);
-                await window.storage.set('custom-color-options', jsonString, true);
-                console.log('커스텀 옵션 저장 완료:', customColorOptions);
+                console.log('JSON 문자열:', jsonString);
+                
+                localStorage.setItem('custom-color-options', jsonString);
+                console.log('✅ 커스텀 옵션 저장 완료 (localStorage)');
                 return true;
             } catch (error) {
-                console.error('저장 실패:', error);
+                console.error('❌ 저장 실패:', error);
                 return false;
             }
         }
@@ -573,7 +579,12 @@
 
         // 부옵션 클릭 이벤트 (토글)
         function toggleOption(optionName) {
-            if (!selectedColor || !selectedMainOption) return;
+            console.log(`🖱️ ${optionName} 클릭됨`);
+            
+            if (!selectedColor || !selectedMainOption) {
+                console.log('❌ 색상 또는 주옵션 미선택');
+                return;
+            }
 
             // 현재 색상의 커스텀 옵션 객체 초기화
             if (!customColorOptions[selectedColor]) {
@@ -595,22 +606,25 @@
             if (index > -1) {
                 // 이미 있으면 제거 (빨간색으로 변경)
                 currentOptions.splice(index, 1);
+                console.log(`🔴 ${optionName}를 좋은 옵션에서 제거`);
             } else {
                 // 없으면 추가 (녹색으로 변경)
                 currentOptions.push(optionName);
+                console.log(`🟢 ${optionName}를 좋은 옵션에 추가`);
             }
 
             // 화면 먼저 업데이트
             updateSubOptions();
             
             // 저장은 비동기로
-            saveCustomOptions().then(saved => {
-                if (saved) {
-                    console.log(`${selectedColor} 색상, ${selectedMainOption} 주옵션의 ${optionName} 토글됨. 현재 좋은 옵션:`, currentOptions);
-                } else {
-                    console.error('저장 실패, 변경사항이 반영되지 않을 수 있습니다.');
-                }
-            });
+            console.log('💾 저장 시작...');
+            const saved = saveCustomOptions();
+            if (saved) {
+                console.log(`✅ 토글 완료: ${selectedColor} / ${selectedMainOption} / ${optionName}`);
+                console.log('현재 좋은 옵션:', currentOptions);
+            } else {
+                console.error('❌ 저장 실패');
+            }
         }
 
         // 부옵션 표시 업데이트
@@ -646,9 +660,8 @@
         }
 
         // 페이지 로드 시 설정 불러오기 및 폴링 시작
-        loadCustomOptions().then(() => {
-            startPolling();
-        });
+        loadCustomOptions();
+        startPolling();
     </script>
 </body>
 </html>
