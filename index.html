@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>에테리아 점령전 PVP 데이터베이스</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <title>장비 옵션 테이블</title>
     <style>
         * {
             margin: 0;
@@ -13,1239 +12,480 @@
         }
 
         body {
-            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0a0e27;
-            background-image: 
-                radial-gradient(ellipse at 20% 50%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(41, 128, 185, 0.1) 0%, transparent 50%);
-            color: #e8eaf6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            padding: 40px 20px;
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
+            color: #1a1a1a;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(90deg, rgba(79, 70, 229, 0.03) 1px, transparent 1px),
-                linear-gradient(rgba(79, 70, 229, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .app-container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(139, 92, 246, 0.2);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            left: 0;
-            top: 0;
-            z-index: 100;
-            overflow-y: auto;
-        }
-
-        .logo {
-            padding: 0 30px 30px;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-            margin-bottom: 30px;
-        }
-
-        .logo h1 {
-            font-size: 1.5em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 5px;
-        }
-
-        .logo p {
-            color: #9ca3af;
-            font-size: 0.85em;
-            font-weight: 300;
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
-            padding: 15px 30px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
-            font-weight: 500;
-            color: #9ca3af;
-        }
-
-        .nav-item:hover {
-            background: rgba(139, 92, 246, 0.1);
-            color: #e8eaf6;
-            border-left-color: rgba(139, 92, 246, 0.3);
-        }
-
-        .nav-item.active {
-            background: rgba(139, 92, 246, 0.15);
-            color: #e8eaf6;
-            border-left-color: #8b5cf6;
-        }
-
-        .nav-icon {
-            font-size: 1.3em;
-        }
-
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .page {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .page-header {
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
             margin-bottom: 40px;
-        }
-
-        .page-title {
-            font-size: 2.5em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-
-        .page-subtitle {
-            color: #9ca3af;
-            font-size: 1.1em;
-            font-weight: 300;
-        }
-
-        .input-section {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 40px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .section-title {
-            font-size: 1.5em;
+            font-size: 2.2em;
             font-weight: 700;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #e8eaf6;
+            letter-spacing: -0.5px;
         }
 
-        .section-title::before {
-            content: '';
-            width: 4px;
-            height: 28px;
-            background: linear-gradient(180deg, #667eea, #764ba2);
-            border-radius: 4px;
-        }
-
-        .battle-info {
+        .grid-layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1fr 350px;
+            gap: 24px;
             margin-bottom: 30px;
         }
 
-        .team-section {
-            background: linear-gradient(135deg, rgba(30, 30, 60, 0.4) 0%, rgba(20, 20, 40, 0.4) 100%);
-            padding: 30px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .team-section:hover {
-            border-color: rgba(139, 92, 246, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.1);
-        }
-
-        .team-section.attacker {
-            border-left: 4px solid #ef4444;
-        }
-
-        .team-section.defender {
-            border-left: 4px solid #3b82f6;
-        }
-
-        h3 {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.2em;
-            font-weight: 600;
-        }
-
-        .character-selector {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .selected-character {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(79, 70, 229, 0.05) 100%);
-            border: 2px solid rgba(139, 92, 246, 0.2);
-            padding: 16px;
+        .card {
+            background: white;
             border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            transition: all 0.3s ease;
-            min-height: 70px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #e8e8e8;
         }
 
-        .selected-character:hover {
-            border-color: #8b5cf6;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-            transform: translateX(4px);
+        .card h2 {
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            font-size: 1.6em;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #1a1a1a;
         }
 
-        .selected-character.empty {
-            justify-content: center;
-            color: #6b7280;
-            font-weight: 500;
-        }
-
-        .char-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 2px solid rgba(139, 92, 246, 0.5);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .char-name {
-            flex: 1;
-            font-weight: 500;
-            font-size: 1.05em;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #1e293b;
-            border: 2px solid #8b5cf6;
-            border-radius: 16px;
-            max-height: 450px;
-            overflow-y: auto;
-            z-index: 9999;
-            margin-top: 8px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            animation: dropdownSlide 0.3s ease;
-        }
-
-        @keyframes dropdownSlide {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .dropdown-menu::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .dropdown-menu::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-        }
-
-        .dropdown-menu::-webkit-scrollbar-thumb {
-            background: #8b5cf6;
-            border-radius: 8px;
-        }
-
-        .search-box {
-            position: sticky;
-            top: 0;
-            background: #1e293b;
-            padding: 16px;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-            z-index: 10;
-        }
-
-        .search-box input {
+        table {
             width: 100%;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            color: #e8eaf6;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s ease;
+            border-collapse: collapse;
         }
 
-        .search-box input:focus {
-            outline: none;
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-        }
-
-        .search-box input::placeholder {
-            color: #6b7280;
-        }
-
-        .char-option {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .char-option:hover {
-            background: rgba(139, 92, 246, 0.2);
-        }
-
-        .char-option img {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 2px solid rgba(139, 92, 246, 0.3);
-        }
-
-        .char-option span {
-            font-weight: 500;
-        }
-
-        select {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(79, 70, 229, 0.05) 100%);
-            border: 2px solid rgba(139, 92, 246, 0.2);
-            color: #e8eaf6;
+        th {
+            background: #f9f9f9;
+            color: #333;
             padding: 14px 18px;
-            border-radius: 12px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-        }
-
-        select option {
-            background: #1e293b;
-            padding: 10px;
-        }
-
-        .result-section {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(139, 92, 246, 0.1);
-        }
-
-        .result-section label {
-            font-weight: 600;
-            font-size: 1.1em;
-        }
-
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 12px;
-            font-size: 1.05em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .stats-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(79, 70, 229, 0.05) 100%);
-            padding: 30px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(139, 92, 246, 0.4);
-            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
-        }
-
-        .stat-value {
-            font-size: 3em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: #9ca3af;
-            font-size: 0.95em;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .content-box {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 40px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .record-card {
-            background: linear-gradient(135deg, rgba(30, 30, 60, 0.4) 0%, rgba(20, 20, 40, 0.4) 100%);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
-            border-left: 4px solid #8b5cf6;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(139, 92, 246, 0.1);
-        }
-
-        .record-card:hover {
-            transform: translateX(8px);
-            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2);
-            border-color: rgba(139, 92, 246, 0.3);
-        }
-
-        .record-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
-        }
-
-        .record-date {
-            color: #9ca3af;
-            font-size: 0.9em;
-            font-weight: 500;
-        }
-
-        .result-badge {
-            padding: 8px 20px;
-            border-radius: 20px;
+            text-align: left;
             font-weight: 700;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 13px;
+            border-bottom: 2px solid #e0e0e0;
+            letter-spacing: 0.3px;
         }
 
-        .result-badge.win {
-            background: linear-gradient(135deg, #10b981, #059669);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        td {
+            padding: 16px 18px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14.5px;
+            color: #2a2a2a;
+            line-height: 1.6;
         }
 
-        .result-badge.lose {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        tr:last-child td {
+            border-bottom: none;
         }
 
-        .teams-display {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 30px;
-            align-items: center;
+        tbody tr:hover {
+            background: #fafafa;
         }
 
-        .team-display {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .team-label {
+        .equipment-name {
             font-weight: 700;
-            margin-bottom: 8px;
-            color: #8b5cf6;
-            font-size: 1.05em;
+            font-size: 15px;
+            color: #1a1a1a;
+            min-width: 100px;
         }
 
-        .character-display {
-            background: rgba(139, 92, 246, 0.1);
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.95em;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            transition: all 0.2s ease;
-        }
-
-        .character-display:hover {
-            background: rgba(139, 92, 246, 0.15);
-            border-color: rgba(139, 92, 246, 0.3);
-        }
-
-        .character-display img {
-            width: 36px;
-            height: 36px;
+        .color-badge {
+            display: inline-block;
+            padding: 5px 12px;
             border-radius: 6px;
-            border: 2px solid rgba(139, 92, 246, 0.3);
+            font-weight: 600;
+            font-size: 12.5px;
+            margin-right: 8px;
+            letter-spacing: -0.2px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .vs {
-            font-size: 2em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ef4444, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .color-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
-        .delete-btn {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            padding: 8px 18px;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        .color-badge.active {
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+            transform: scale(1.05);
         }
 
-        .delete-btn:hover {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
+        .color-red { 
+            background: #fee; 
+            color: #c00; 
+            border: 1px solid #fcc;
+        }
+        .color-blue { 
+            background: #e3f2fd; 
+            color: #1565c0; 
+            border: 1px solid #bbdefb;
+        }
+        .color-yellow { 
+            background: #fff9e6; 
+            color: #b8860b; 
+            border: 1px solid #ffe9a8;
+        }
+        .color-green { 
+            background: #e8f5e9; 
+            color: #2e7d32; 
+            border: 1px solid #c8e6c9;
         }
 
-        .empty-state {
+        .section-divider {
+            font-weight: 600;
+            color: #666;
+            margin: 0 6px;
+        }
+
+        /* 색상별 섹션 테이블 스타일 */
+        .color-section-table td:first-child {
+            font-weight: 600;
+        }
+
+        .color-section-table td {
             text-align: center;
-            padding: 80px 20px;
-            color: #6b7280;
+            padding: 14px 12px;
         }
 
-        .empty-state-icon {
-            font-size: 5em;
-            margin-bottom: 20px;
-            opacity: 0.5;
+        .color-section-table td:first-child {
+            text-align: left;
         }
 
-        .empty-state p {
-            font-size: 1.1em;
+        .color-section-table th {
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .color-section-table th:first-child {
+            text-align: left;
+        }
+
+        /* 색상 선택 버튼 */
+        .color-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .color-selector .color-badge {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* 부옵션 상태 스타일 */
+        .sub-option-item {
+            display: inline-block;
+            padding: 6px 14px;
+            margin: 3px;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: all 0.3s;
             font-weight: 500;
         }
 
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 250px;
-            }
+        .sub-option-item.good {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+            font-weight: 600;
+        }
 
-            .main-content {
-                margin-left: 250px;
+        .sub-option-item.bad {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+            opacity: 0.7;
+        }
+
+        .sub-option-item.neutral {
+            background: #f5f5f5;
+            color: #666;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* 반응형 */
+        @media (max-width: 1200px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                border-right: none;
-                border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-            }
+        /* 주요 부옵션 스타일 */
+        .sub-options {
+            color: #555;
+            font-size: 13.5px;
+            letter-spacing: 0.2px;
+        }
 
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
+        /* 옵션 분석기 스타일 */
+        .option-analyzer {
+            margin-top: 24px;
+        }
 
-            .page-title {
-                font-size: 2em;
-            }
+        .main-option-select {
+            margin-bottom: 20px;
+        }
 
-            .battle-info {
-                grid-template-columns: 1fr;
-            }
+        .main-option-select label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
 
-            .teams-display {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
+        .main-option-select select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
 
-            .vs {
-                font-size: 1.5em;
-                text-align: center;
-            }
+        .main-option-select select:focus {
+            outline: none;
+            border-color: #1a1a1a;
+        }
+
+        .sub-options-display {
+            line-height: 2;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo">
-                <h1>⚔️ 에테리아</h1>
-                <p>Conquest PVP Tracker</p>
-            </div>
-            <ul class="nav-menu">
-                <li class="nav-item active" onclick="showPage('dashboard')">
-                    <span class="nav-icon">📊</span>
-                    <span>대시보드</span>
-                </li>
-                <li class="nav-item" onclick="showPage('record')">
-                    <span class="nav-icon">✏️</span>
-                    <span>전투 기록</span>
-                </li>
-                <li class="nav-item" onclick="showPage('history')">
-                    <span class="nav-icon">📜</span>
-                    <span>전투 이력</span>
-                </li>
-                <li class="nav-item" onclick="showPage('stats')">
-                    <span class="nav-icon">📈</span>
-                    <span>상세 통계</span>
-                </li>
-            </ul>
-        </aside>
-
-        <main class="main-content">
-            <!-- 대시보드 페이지 -->
-            <div id="dashboard" class="page active">
-                <div class="page-header">
-                    <h1 class="page-title">대시보드</h1>
-                    <p class="page-subtitle">전체 전적 요약</p>
-                </div>
-
-                <div class="stats-section">
-                    <div class="stat-card">
-                        <div class="stat-value" id="dashTotalBattles">0</div>
-                        <div class="stat-label">총 전투 수</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="dashTotalWins">0</div>
-                        <div class="stat-label">승리</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="dashTotalLoses">0</div>
-                        <div class="stat-label">패배</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="dashWinRate">0%</div>
-                        <div class="stat-label">승률</div>
-                    </div>
-                </div>
-
-                <div class="content-box">
-                    <h2 class="section-title">최근 전투</h2>
-                    <div id="recentBattles"></div>
-                </div>
-            </div>
-
-            <!-- 전투 기록 페이지 -->
-            <div id="record" class="page">
-                <div class="page-header">
-                    <h1 class="page-title">전투 기록</h1>
-                    <p class="page-subtitle">새로운 전투 결과를 입력하세요</p>
-                </div>
-
-                <div class="input-section">
-                    <div class="battle-info">
-                        <div class="team-section attacker">
-                            <h3>
-                                <span>⚔️</span>
-                                공격팀 (나)
-                            </h3>
-                            <div id="attackerSelectors"></div>
-                        </div>
-
-                        <div class="team-section defender">
-                            <h3>
-                                <span>🛡️</span>
-                                방어팀 (상대)
-                            </h3>
-                            <div id="defenderSelectors"></div>
-                        </div>
-                    </div>
-
-                    <div class="result-section">
-                        <label>전투 결과</label>
-                        <select id="battleResult">
-                            <option value="win">승리 ✓</option>
-                            <option value="lose">패배 ✗</option>
-                        </select>
-                        <button id="addRecordBtn">전투 기록 추가</button>
-                    </div>
-                </div>
+    <div class="container">
+        <h1>가방 쿠와앙</h1>
+        
+        <div class="grid-layout">
+            <!-- 장비 옵션 (좌측, 넓게) -->
+            <div class="card">
+                <h2>장비 옵션</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 110px;">장비</th>
+                            <th style="width: 200px;">주요 부옵션</th>
+                            <th>판매 옵션 (색상별)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="equipment-name">마스크</td>
+                            <td class="sub-options">치확 / 치피 / 공% / 속도<br>효명 / 깡방 / 깡체</td>
+                            <td>
+                                <span class="color-badge color-red">빨강</span> 깡방/깡체
+                                <span class="section-divider">|</span>
+                                <span class="color-badge color-blue">파랑</span> 깡방/깡체/속X
+                                <span class="section-divider">|</span>
+                                <span class="color-badge color-yellow">노랑</span> 공%
+                                <span class="section-divider">|</span>
+                                <span class="color-badge color-green">초록</span> 깡공
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">트랜지스터</td>
+                            <td class="sub-options">치확 / 치피 / 속도 / 체%<br>깡방 / 효저 / 깡공</td>
+                            <td>
+                                <span class="color-badge color-red">빨강</span> 효저/깡방
+                                <span class="section-divider">|</span>
+                                <span class="color-badge color-blue">파랑</span> 효저/깡공/속X
+                                <span class="section-divider">|</span>
+                                <span class="color-badge color-yellow">노랑</span> 깡공
+                                <span class="section-divider">|</span>
+                                <span class="color-badge color-green">초록</span> 깡공/치피
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">리스트</td>
+                            <td class="sub-options">치확 / 치피 / 속도 / 방%<br>깡체 / 효저 / 깡공</td>
+                            <td>
+                                <span class="color-badge color-red">빨강</span> 효저/깡공
+                                <span class="section-divider">|</span>
+                                <span class="color-badge color-blue">파랑</span> 효저/깡공/속X
+                                <span class="section-divider">|</span>
+                                <span class="color-badge color-yellow">노랑</span> 깡공
+                                <span class="section-divider">|</span>
+                                <span class="color-badge color-green">초록</span> 깡공
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <!-- 전투 이력 페이지 -->
-            <div id="history" class="page">
-                <div class="page-header">
-                    <h1 class="page-title">전투 이력</h1>
-                    <p class="page-subtitle">모든 전투 기록을 확인하세요</p>
-                </div>
+            <!-- 색상별 섹션 (우측 상단) -->
+            <div class="card">
+                <h2>색상별 섹션</h2>
+                <table class="color-section-table">
+                    <thead>
+                        <tr>
+                            <th>색상</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="color-badge color-red">빨강</span></td>
+                            <td>공세</td>
+                            <td>처단</td>
+                            <td>광폭</td>
+                            <td>기세<br>추격</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-badge color-blue">파랑</span></td>
+                            <td>질주</td>
+                            <td>수호</td>
+                            <td>진격</td>
+                            <td>시공<br>지배</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-badge color-yellow">노랑</span></td>
+                            <td>강철</td>
+                            <td>악기</td>
+                            <td>유혈</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-badge color-green">초록</span></td>
+                            <td>원천</td>
+                            <td>치유</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                <div class="content-box">
-                    <div id="recordsList"></div>
-                </div>
+        <!-- 오른쪽 모듈 (장비 옵션 아래) -->
+        <div class="card">
+            <h2>오른쪽 모듈</h2>
+            
+            <div class="color-selector">
+                <span class="color-badge color-red" data-color="red">빨강</span>
+                <span class="color-badge color-blue" data-color="blue">파랑</span>
+                <span class="color-badge color-yellow" data-color="yellow">노랑</span>
+                <span class="color-badge color-green" data-color="green">초록</span>
             </div>
 
-            <!-- 상세 통계 페이지 -->
-            <div id="stats" class="page">
-                <div class="page-header">
-                    <h1 class="page-title">상세 통계</h1>
-                    <p class="page-subtitle">전적 분석 및 통계</p>
+            <div class="option-analyzer">
+                <div class="main-option-select">
+                    <label>주 옵션 선택</label>
+                    <select id="mainOptionSelect">
+                        <option value="">선택하세요</option>
+                        <option value="HP%">HP%</option>
+                        <option value="치명타 확률">치명타 확률</option>
+                        <option value="치명타 피해">치명타 피해</option>
+                        <option value="공%">공%</option>
+                        <option value="방%">방%</option>
+                        <option value="효과 명중">효과 명중</option>
+                        <option value="효과 저항">효과 저항</option>
+                        <option value="깡체">깡체</option>
+                    </select>
                 </div>
 
-                <div class="stats-section">
-                    <div class="stat-card">
-                        <div class="stat-value" id="statsTotalBattles">0</div>
-                        <div class="stat-label">총 전투 수</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="statsTotalWins">0</div>
-                        <div class="stat-label">승리</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="statsTotalLoses">0</div>
-                        <div class="stat-label">패배</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="statsWinRate">0%</div>
-                        <div class="stat-label">승률</div>
-                    </div>
-                </div>
-
-                <div class="content-box">
-                    <h2 class="section-title">추가 통계</h2>
-                    <p style="color: #9ca3af; padding: 40px; text-align: center;">더 많은 통계 기능이 곧 추가됩니다!</p>
+                <div class="sub-options-display" id="subOptionsDisplay">
+                    색상과 주 옵션을 선택하세요
                 </div>
             </div>
-        </main>
+        </div>
+
+
     </div>
 
     <script>
-        const characters = [
-            { name: 'Andrew [Odd]', slug: 'andrew-odd' },
-            { name: 'Andrew [Reason]', slug: 'andrew-reason' },
-            { name: 'Asshu', slug: 'asshu' },
-            { name: 'Batsby', slug: 'batsby' },
-            { name: 'Beyontin', slug: 'beyontin' },
-            { name: 'Borgne', slug: 'borgne' },
-            { name: 'Cachi', slug: 'cachi' },
-            { name: 'Cachi [The Guard]', slug: 'cachi-the-guard' },
-            { name: 'Celince', slug: 'celince' },
-            { name: 'Chiaki', slug: 'chiaki' },
-            { name: 'Chiaki [The Echo]', slug: 'chiaki-the-echo' },
-            { name: 'Dinah', slug: 'dinah' },
-            { name: 'Diting', slug: 'diting' },
-            { name: 'DokiDoki', slug: 'dokidoki' },
-            { name: 'Dorothy', slug: 'dorothy' },
-            { name: 'Dorothy [The Wisher]', slug: 'dorothy-the-wisher' },
-            { name: 'Fangus', slug: 'fangus' },
-            { name: 'Freya', slug: 'freya' },
-            { name: 'Fuqiu', slug: 'fuqiu' },
-            { name: 'Gray', slug: 'gray' },
-            { name: 'Heinrich', slug: 'heinrich' },
-            { name: 'Helkid', slug: 'helkid' },
-            { name: 'Hizuki Mari', slug: 'hizuki-mari' },
-            { name: 'Holden', slug: 'holden' },
-            { name: 'Hoyan', slug: 'hoyan' },
-            { name: 'Kazami Kazuyo', slug: 'kazami-kazuyo' },
-            { name: 'Kazuyo [The Reverie]', slug: 'kazuyo-the-reverie' },
-            { name: 'Khloros', slug: 'khloros' },
-            { name: 'Kloss', slug: 'kloss' },
-            { name: 'Kokardi', slug: 'kokardi' },
-            { name: 'Kraken', slug: 'kraken' },
-            { name: 'Lian', slug: 'lian' },
-            { name: 'Liliam', slug: 'liliam' },
-            { name: 'Lilith', slug: 'lilith' },
-            { name: 'Lily', slug: 'lily' },
-            { name: 'Lingluo', slug: 'lingluo' },
-            { name: 'Marvell', slug: 'marvell' },
-            { name: 'Massiah', slug: 'massiah' },
-            { name: 'Mia', slug: 'mia' },
-            { name: 'Mio', slug: 'mio' },
-            { name: 'Mizuki Makoto', slug: 'mizuki-makoto' },
-            { name: 'Mizusumi Aya', slug: 'mizusumi-aya' },
-            { name: 'Nahor', slug: 'nahor' },
-            { name: 'Nell', slug: 'nell' },
-            { name: 'Ninfoniel', slug: 'ninfoniel' },
-            { name: 'No. 41', slug: 'no-41' },
-            { name: 'Obol', slug: 'obol' },
-            { name: 'Oboro', slug: 'oboro' },
-            { name: 'Plume', slug: 'plume' },
-            { name: 'Raikou', slug: 'raikou' },
-            { name: 'Raikou [The Obsession]', slug: 'raikou-the-obsession' },
-            { name: 'Rammu', slug: 'rammu' },
-            { name: 'Richter', slug: 'richter' },
-            { name: 'Rumi', slug: 'rumi' },
-            { name: 'Sania', slug: 'sania' },
-            { name: 'Sania [Vengeful Thorn]', slug: 'sania-vengeful-thorn' },
-            { name: 'Selena', slug: 'selena' },
-            { name: 'Seren', slug: 'seren' },
-            { name: 'Sharp', slug: 'sharp' },
-            { name: 'Skadi', slug: 'skadi' },
-            { name: 'Sybil', slug: 'sybil' },
-            { name: 'Tao Le Si', slug: 'tao-le-si' },
-            { name: 'Tao Le Si [The Punishment]', slug: 'tao-le-si-the-punishment' },
-            { name: 'Thrud', slug: 'thrud' },
-            { name: 'Toto', slug: 'toto' },
-            { name: 'Tsuchimikado Kurumi', slug: 'tsuchimikado-kurumi' },
-            { name: 'Tsunare', slug: 'tsunare' },
-            { name: 'Valla', slug: 'valla' },
-            { name: 'Vice', slug: 'vice' },
-            { name: 'Wadatsumi', slug: 'wadatsumi' },
-            { name: 'Yeli', slug: 'yeli' },
-            { name: 'Yozakura', slug: 'yozakura' },
-            { name: 'Yuri', slug: 'yuri' }
-        ];
-
-        function getCharIcon(slug, name) {
-            return `https://www.prydwen.gg/static/${slug}_icon.webp`;
-        }
-
-        function getCharInitials(name) {
-            const words = name.split(' ');
-            if (words.length > 1) {
-                return words[0][0] + words[1][0];
-            }
-            return name.substring(0, 2).toUpperCase();
-        }
-
-        function createFallbackIcon(name) {
-            const initials = getCharInitials(name);
-            const colors = ['#667eea', '#764ba2', '#f093fb', '#8b5cf6', '#06b6d4'];
-            const color = colors[name.length % colors.length];
-            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect fill='${encodeURIComponent(color)}' width='48' height='48' rx='8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${initials}%3C/text%3E%3C/svg%3E`;
-        }
-
-        let selectedChars = {
-            attacker1: null,
-            attacker2: null,
-            attacker3: null,
-            defender1: null,
-            defender2: null,
-            defender3: null
+        // 주 옵션별 부옵션 데이터
+        const mainOptionData = {
+            'HP%': ['깡체', '공%', '깡공', '방%', '깡방', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속'],
+            '치명타 확률': ['HP%', '깡체', '공%', '깡공', '방%', '깡방', '치명타 피해', '효과 명중', '효과 저항', '공속'],
+            '치명타 피해': ['HP%', '깡체', '공%', '깡공', '방%', '깡방', '치명타 확률', '효과 명중', '효과 저항', '공속'],
+            '공%': ['HP%', '깡체', '깡공', '방%', '깡방', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속'],
+            '방%': ['HP%', '깡체', '공%', '깡공', '깡방', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속'],
+            '효과 명중': ['HP%', '깡체', '공%', '깡공', '방%', '깡방', '치명타 확률', '치명타 피해', '효과 저항', '공속'],
+            '효과 저항': ['HP%', '깡체', '공%', '깡공', '방%', '깡방', '치명타 확률', '치명타 피해', '효과 명중', '공속'],
+            '깡체': ['HP%', '공%', '깡공', '방%', '깡방', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속']
         };
 
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            
-            document.getElementById(pageId).classList.add('active');
-            event.currentTarget.classList.add('active');
-            
-            if (pageId === 'dashboard' || pageId === 'stats') {
-                loadBattles();
-            } else if (pageId === 'history') {
-                loadHistory();
-            }
-        }
+        // 색상별 좋은 옵션 정의
+        const colorGoodOptions = {
+            'red': ['치명타 확률', '치명타 피해', '공%', '깡공', '공속'],
+            'blue': ['HP%', '방%', '깡방', '깡체', '효과 저항'],
+            'yellow': ['HP%', '방%', '깡방', '깡체'],
+            'green': ['효과 명중', '효과 저항']
+        };
 
-        function createCharacterSelector(id, label) {
-            const selector = document.createElement('div');
-            selector.className = 'character-selector';
-            selector.setAttribute('data-selector-id', id);
-            
-            const display = document.createElement('div');
-            display.className = 'selected-character empty';
-            display.innerHTML = `<span>${label}</span>`;
-            display.addEventListener('click', () => toggleDropdown(id));
-            
-            selector.appendChild(display);
-            return selector;
-        }
+        let selectedColor = null;
+        let selectedMainOption = null;
 
-        function toggleDropdown(id) {
-            const existing = document.querySelector('.dropdown-menu');
-            if (existing) {
-                existing.remove();
-                return;
-            }
+        // 색상 선택 이벤트
+        document.querySelectorAll('.color-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                const color = this.getAttribute('data-color');
+                if (!color) return;
 
-            const selector = document.querySelector(`[data-selector-id="${id}"]`);
-            const dropdown = document.createElement('div');
-            dropdown.className = 'dropdown-menu';
-            
-            const searchBox = document.createElement('div');
-            searchBox.className = 'search-box';
-            const searchInput = document.createElement('input');
-            searchInput.type = 'text';
-            searchInput.placeholder = '캐릭터 검색...';
-            searchInput.addEventListener('keyup', (e) => filterCharacters(e.target.value, id));
-            searchBox.appendChild(searchInput);
-            
-            const charList = document.createElement('div');
-            charList.id = `charList-${id}`;
-            
-            dropdown.appendChild(searchBox);
-            dropdown.appendChild(charList);
-            selector.appendChild(dropdown);
-            
-            populateCharList(id);
-            searchInput.focus();
-        }
-
-        function populateCharList(id, filter = '') {
-            const listContainer = document.getElementById(`charList-${id}`);
-            if (!listContainer) return;
-            
-            const team = id.includes('attacker') ? 'attacker' : 'defender';
-            const selectedInTeam = [
-                selectedChars[`${team}1`],
-                selectedChars[`${team}2`],
-                selectedChars[`${team}3`]
-            ].filter(char => char !== null).map(char => char.name);
-            
-            const filtered = characters.filter(char => 
-                char.name.toLowerCase().includes(filter.toLowerCase()) &&
-                !selectedInTeam.includes(char.name)
-            );
-            
-            if (filtered.length === 0) {
-                listContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">검색 결과가 없습니다</div>';
-                return;
-            }
-            
-            listContainer.innerHTML = '';
-            filtered.forEach(char => {
-                const option = document.createElement('div');
-                option.className = 'char-option';
-                option.addEventListener('click', () => selectCharacter(id, char.name, char.slug));
+                // 활성화 상태 토글
+                document.querySelectorAll('.color-badge[data-color]').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
                 
-                const img = document.createElement('img');
-                img.src = getCharIcon(char.slug, char.name);
-                img.alt = char.name;
-                img.onerror = function() {
-                    this.src = createFallbackIcon(char.name);
-                };
-                
-                const span = document.createElement('span');
-                span.textContent = char.name;
-                
-                option.appendChild(img);
-                option.appendChild(span);
-                listContainer.appendChild(option);
+                selectedColor = color;
+                updateSubOptions();
             });
-        }
-
-        function filterCharacters(filter, id) {
-            populateCharList(id, filter);
-        }
-
-        function selectCharacter(id, name, slug) {
-            const team = id.includes('attacker') ? 'attacker' : 'defender';
-            const teamChars = [
-                selectedChars[`${team}1`],
-                selectedChars[`${team}2`],
-                selectedChars[`${team}3`]
-            ].filter(char => char !== null);
-            
-            const alreadySelected = teamChars.some(char => char.name === name);
-            if (alreadySelected) {
-                alert('같은 팀에 동일한 캐릭터를 중복으로 선택할 수 없습니다!');
-                const dropdown = document.querySelector('.dropdown-menu');
-                if (dropdown) dropdown.remove();
-                return;
-            }
-            
-            selectedChars[id] = { name, slug };
-            
-            const selector = document.querySelector(`[data-selector-id="${id}"]`);
-            const display = selector.querySelector('.selected-character');
-            
-            display.className = 'selected-character';
-            display.innerHTML = `
-                <img src="${getCharIcon(slug, name)}" alt="${name}" class="char-icon" onerror="this.src='${createFallbackIcon(name)}'">
-                <span class="char-name">${name}</span>
-            `;
-            
-            const dropdown = document.querySelector('.dropdown-menu');
-            if (dropdown) dropdown.remove();
-            
-            const teamNumber = parseInt(id.slice(-1));
-            if (teamNumber < 3) {
-                const nextId = `${team}${teamNumber + 1}`;
-                if (!selectedChars[nextId]) {
-                    setTimeout(() => toggleDropdown(nextId), 200);
-                }
-            }
-        }
-
-        function initializeSelectors() {
-            const attackerContainer = document.getElementById('attackerSelectors');
-            const defenderContainer = document.getElementById('defenderSelectors');
-            
-            for (let i = 1; i <= 3; i++) {
-                attackerContainer.appendChild(createCharacterSelector(`attacker${i}`, `캐릭터 ${i} 선택`));
-                defenderContainer.appendChild(createCharacterSelector(`defender${i}`, `캐릭터 ${i} 선택`));
-            }
-        }
-
-        function loadBattles() {
-            const saved = localStorage.getItem('etheria-battles');
-            const battles = saved ? JSON.parse(saved) : [];
-            
-            updateDashboard(battles);
-            updateStats(battles);
-            displayRecentBattles(battles);
-        }
-
-        function loadHistory() {
-            const saved = localStorage.getItem('etheria-battles');
-            const battles = saved ? JSON.parse(saved) : [];
-            displayRecords(battles);
-        }
-
-        function saveBattles(battles) {
-            localStorage.setItem('etheria-battles', JSON.stringify(battles));
-        }
-
-        function addRecord() {
-            if (!selectedChars.attacker1 || !selectedChars.attacker2 || !selectedChars.attacker3 ||
-                !selectedChars.defender1 || !selectedChars.defender2 || !selectedChars.defender3) {
-                alert('모든 캐릭터를 선택해주세요!');
-                return;
-            }
-
-            const result = document.getElementById('battleResult').value;
-
-            const battle = {
-                id: Date.now(),
-                date: new Date().toLocaleString('ko-KR'),
-                attackers: [selectedChars.attacker1, selectedChars.attacker2, selectedChars.attacker3],
-                defenders: [selectedChars.defender1, selectedChars.defender2, selectedChars.defender3],
-                result: result
-            };
-
-            const saved = localStorage.getItem('etheria-battles');
-            const battles = saved ? JSON.parse(saved) : [];
-            battles.unshift(battle);
-            saveBattles(battles);
-
-            selectedChars = {
-                attacker1: null, attacker2: null, attacker3: null,
-                defender1: null, defender2: null, defender3: null
-            };
-            
-            document.querySelectorAll('.selected-character').forEach((el, idx) => {
-                el.className = 'selected-character empty';
-                el.innerHTML = `<span>캐릭터 ${(idx % 3) + 1} 선택</span>`;
-            });
-
-            alert('전투 기록이 추가되었습니다!');
-            loadBattles();
-        }
-
-        function deleteRecord(id) {
-            if (confirm('이 전투 기록을 삭제하시겠습니까?')) {
-                const saved = localStorage.getItem('etheria-battles');
-                let battles = saved ? JSON.parse(saved) : [];
-                battles = battles.filter(b => b.id !== id);
-                saveBattles(battles);
-                loadHistory();
-                loadBattles();
-            }
-        }
-
-        function updateDashboard(battles) {
-            const total = battles.length;
-            const wins = battles.filter(b => b.result === 'win').length;
-            const loses = battles.filter(b => b.result === 'lose').length;
-            const winRate = total > 0 ? ((wins / total) * 100).toFixed(1) : 0;
-
-            document.getElementById('dashTotalBattles').textContent = total;
-            document.getElementById('dashTotalWins').textContent = wins;
-            document.getElementById('dashTotalLoses').textContent = loses;
-            document.getElementById('dashWinRate').textContent = winRate + '%';
-        }
-
-        function updateStats(battles) {
-            const total = battles.length;
-            const wins = battles.filter(b => b.result === 'win').length;
-            const loses = battles.filter(b => b.result === 'lose').length;
-            const winRate = total > 0 ? ((wins / total) * 100).toFixed(1) : 0;
-
-            document.getElementById('statsTotalBattles').textContent = total;
-            document.getElementById('statsTotalWins').textContent = wins;
-            document.getElementById('statsTotalLoses').textContent = loses;
-            document.getElementById('statsWinRate').textContent = winRate + '%';
-        }
-
-        function displayRecentBattles(battles) {
-            const container = document.getElementById('recentBattles');
-            const recent = battles.slice(0, 5);
-            
-            if (recent.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📋</div>
-                        <p>아직 기록된 전투가 없습니다.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = recent.map(battle => `
-                <div class="record-card">
-                    <div class="record-header">
-                        <span class="record-date">${battle.date}</span>
-                        <span class="result-badge ${battle.result}">${battle.result === 'win' ? '승리' : '패배'}</span>
-                    </div>
-                    <div class="teams-display">
-                        <div class="team-display">
-                            <div class="team-label">⚔️ 공격팀</div>
-                            ${battle.attackers.map(char => `
-                                <div class="character-display">
-                                    <img src="${getCharIcon(char.slug, char.name)}" alt="${char.name}" onerror="this.src='${createFallbackIcon(char.name)}'">
-                                    <span>${char.name}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="team-display">
-                            <div class="team-label">🛡️ 방어팀</div>
-                            ${battle.defenders.map(char => `
-                                <div class="character-display">
-                                    <img src="${getCharIcon(char.slug, char.name)}" alt="${char.name}" onerror="this.src='${createFallbackIcon(char.name)}'">
-                                    <span>${char.name}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function displayRecords(battles) {
-            const recordsList = document.getElementById('recordsList');
-            
-            if (battles.length === 0) {
-                recordsList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📋</div>
-                        <p>아직 기록된 전투가 없습니다.</p>
-                        <p style="margin-top: 10px; color: #6b7280;">전투 기록 메뉴에서 첫 전투를 기록해보세요!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            recordsList.innerHTML = battles.map(battle => `
-                <div class="record-card">
-                    <div class="record-header">
-                        <span class="record-date">${battle.date}</span>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <span class="result-badge ${battle.result}">${battle.result === 'win' ? '승리' : '패배'}</span>
-                            <button class="delete-btn" onclick="deleteRecord(${battle.id})">삭제</button>
-                        </div>
-                    </div>
-                    <div class="teams-display">
-                        <div class="team-display">
-                            <div class="team-label">⚔️ 공격팀</div>
-                            ${battle.attackers.map(char => `
-                                <div class="character-display">
-                                    <img src="${getCharIcon(char.slug)}" alt="${char.name}">
-                                    <span>${char.name}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="team-display">
-                            <div class="team-label">🛡️ 방어팀</div>
-                            ${battle.defenders.map(char => `
-                                <div class="character-display">
-                                    <img src="${getCharIcon(char.slug)}" alt="${char.name}">
-                                    <span>${char.name}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.character-selector')) {
-                const dropdown = document.querySelector('.dropdown-menu');
-                if (dropdown) dropdown.remove();
-            }
         });
 
-        document.getElementById('addRecordBtn').addEventListener('click', addRecord);
+        // 주 옵션 선택 이벤트
+        document.getElementById('mainOptionSelect').addEventListener('change', function() {
+            selectedMainOption = this.value;
+            updateSubOptions();
+        });
 
-        initializeSelectors();
-        loadBattles();
+        // 부옵션 표시 업데이트
+        function updateSubOptions() {
+            const display = document.getElementById('subOptionsDisplay');
+            
+            if (!selectedColor) {
+                display.innerHTML = '색상을 선택하세요';
+                return;
+            }
+            
+            if (!selectedMainOption) {
+                display.innerHTML = '주 옵션을 선택하세요';
+                return;
+            }
+
+            const subOptions = mainOptionData[selectedMainOption];
+            const goodOptions = colorGoodOptions[selectedColor];
+
+            let html = '';
+            subOptions.forEach(option => {
+                let cssClass = 'neutral';
+                
+                if (goodOptions.includes(option)) {
+                    cssClass = 'good';
+                } else {
+                    cssClass = 'bad';
+                }
+
+                html += `<span class="sub-option-item ${cssClass}">${option}</span>`;
+            });
+
+            display.innerHTML = html;
+        }
     </script>
 </body>
 </html>
