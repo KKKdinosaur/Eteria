@@ -415,6 +415,11 @@
     </div>
 
     <script>
+        // JSONBin.io 설정
+        const JSONBIN_BIN_ID = '6922f96aae596e708f6b9402';
+        const JSONBIN_API_KEY = '$2a$10$zDafvaVaEGF1Ybm2gCeEE.ZxR17ccQ4WYGDxm6W/5WDj1c8lL//Nq';
+        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+
         // 주 옵션별 부옵션 데이터
         const mainOptionData = {
             'HP%': ['깡체', '공%', '깡공', '방%', '깡방', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속'],
@@ -481,64 +486,108 @@
         let customColorOptions = {}; // 사용자 정의 색상별 옵션
         let pollInterval = null; // 폴링 인터벌
 
-        // 페이지 로드 시 저장된 설정 불러오기
-        function loadCustomOptions() {
-            console.log('🔄 설정 로드 시작...');
+        // 페이지 로드 시 저장된 설정 불러오기 (JSONBin.io에서 불러오기)
+        async function loadCustomOptions() {
+            console.log('🔄 JSONBin에서 설정 로드 시작...');
             try {
-                const savedData = localStorage.getItem('custom-color-options');
-                console.log('로드 결과:', savedData);
-                
-                if (savedData) {
-                    customColorOptions = JSON.parse(savedData);
-                    console.log('✅ 커스텀 옵션 로드 완료:', customColorOptions);
+                const response = await fetch(`${JSONBIN_URL}/latest`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY
+                    }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    customColorOptions = result.record;
+                    console.log('✅ JSONBin에서 로드 완료:', customColorOptions);
+                    // 로컬에도 백업
+                    localStorage.setItem('custom-color-options', JSON.stringify(customColorOptions));
                 } else {
-                    // 저장된 값이 없으면 기본값으로 초기화하고 저장
-                    console.log('⚠️ 저장된 설정 없음, 기본값 사용');
-                    customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
-                    saveCustomOptions();
+                    console.log('⚠️ JSONBin 로드 실패, 로컬 저장소 확인');
+                    // JSONBin 실패시 로컬 저장소에서 로드
+                    const savedData = localStorage.getItem('custom-color-options');
+                    if (savedData) {
+                        customColorOptions = JSON.parse(savedData);
+                        console.log('✅ 로컬에서 로드 완료');
+                    } else {
+                        customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
+                        console.log('⚠️ 기본값 사용');
+                    }
                 }
             } catch (error) {
-                console.log('❌ 저장된 설정 로드 실패:', error);
-                customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
-                saveCustomOptions();
+                console.log('❌ 로드 에러:', error);
+                // 에러 발생시 로컬 저장소에서 로드
+                const savedData = localStorage.getItem('custom-color-options');
+                if (savedData) {
+                    customColorOptions = JSON.parse(savedData);
+                    console.log('✅ 로컬에서 로드 완료 (에러 복구)');
+                } else {
+                    customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
+                    console.log('⚠️ 기본값 사용 (에러 복구)');
+                }
             }
             updateSubOptions();
         }
 
-        // 주기적으로 변경사항 확인 (5초마다)
+        // 주기적으로 변경사항 확인 (10초마다 JSONBin에서 확인)
         function startPolling() {
             if (pollInterval) clearInterval(pollInterval);
             
-            pollInterval = setInterval(() => {
+            pollInterval = setInterval(async () => {
                 try {
-                    const savedData = localStorage.getItem('custom-color-options');
-                    if (savedData) {
-                        const newOptions = JSON.parse(savedData);
+                    const response = await fetch(`${JSONBIN_URL}/latest`, {
+                        method: 'GET',
+                        headers: {
+                            'X-Master-Key': JSONBIN_API_KEY
+                        }
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        const newOptions = result.record;
+                        
                         // 변경사항이 있으면 업데이트
                         if (JSON.stringify(newOptions) !== JSON.stringify(customColorOptions)) {
                             customColorOptions = newOptions;
                             updateSubOptions();
-                            console.log('다른 사용자의 변경사항 반영됨');
+                            console.log('🔄 다른 사용자의 변경사항 반영됨');
+                            // 로컬에도 백업
+                            localStorage.setItem('custom-color-options', JSON.stringify(customColorOptions));
                         }
                     }
                 } catch (error) {
                     console.log('폴링 에러:', error);
                 }
-            }, 5000);
+            }, 10000); // 10초마다
         }
 
-        // 커스텀 옵션 저장
-        function saveCustomOptions() {
+        // 커스텀 옵션 저장 (JSONBin.io에 저장)
+        async function saveCustomOptions() {
             try {
-                console.log('저장 시도 중...', customColorOptions);
-                const jsonString = JSON.stringify(customColorOptions);
-                console.log('JSON 문자열:', jsonString);
+                console.log('💾 JSONBin에 저장 시도 중...', customColorOptions);
                 
-                localStorage.setItem('custom-color-options', jsonString);
-                console.log('✅ 커스텀 옵션 저장 완료 (localStorage)');
-                return true;
+                const response = await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify(customColorOptions)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('✅ JSONBin 저장 완료:', result);
+                    // 로컬에도 백업 저장
+                    localStorage.setItem('custom-color-options', JSON.stringify(customColorOptions));
+                    return true;
+                } else {
+                    console.error('❌ JSONBin 저장 실패:', response.status);
+                    return false;
+                }
             } catch (error) {
-                console.error('❌ 저장 실패:', error);
+                console.error('❌ 저장 에러:', error);
                 return false;
             }
         }
@@ -616,15 +665,16 @@
             // 화면 먼저 업데이트
             updateSubOptions();
             
-            // 저장은 비동기로
+            // 저장
             console.log('💾 저장 시작...');
-            const saved = saveCustomOptions();
-            if (saved) {
-                console.log(`✅ 토글 완료: ${selectedColor} / ${selectedMainOption} / ${optionName}`);
-                console.log('현재 좋은 옵션:', currentOptions);
-            } else {
-                console.error('❌ 저장 실패');
-            }
+            saveCustomOptions().then(saved => {
+                if (saved) {
+                    console.log(`✅ 토글 완료: ${selectedColor} / ${selectedMainOption} / ${optionName}`);
+                    console.log('현재 좋은 옵션:', currentOptions);
+                } else {
+                    console.error('❌ 저장 실패');
+                }
+            });
         }
 
         // 부옵션 표시 업데이트
@@ -660,8 +710,9 @@
         }
 
         // 페이지 로드 시 설정 불러오기 및 폴링 시작
-        loadCustomOptions();
-        startPolling();
+        loadCustomOptions().then(() => {
+            startPolling();
+        });
     </script>
 </body>
 </html>
