@@ -191,6 +191,17 @@
             font-size: 15px;
             transition: all 0.3s;
             font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .sub-option-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .sub-option-item:active {
+            transform: translateY(0);
         }
 
         .sub-option-item.good {
@@ -420,16 +431,54 @@
             '깡체': ['HP%', '공%', '깡공', '방%', '깡방', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속']
         };
 
-        // 색상별 좋은 옵션 정의
-        const colorGoodOptions = {
+        // 주 옵션별 유효 옵션 정의 (색상 무관)
+        const mainOptionValidOptions = {
+            'HP%': ['깡체', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속', '방%']
+        };
+
+        // 색상별 좋은 옵션 정의 (기본값)
+        const defaultColorGoodOptions = {
             'red': ['치명타 확률', '치명타 피해', '공%', '깡공', '공속'],
-            'blue': ['HP%', '방%', '깡방', '깡체', '효과 저항'],
-            'yellow': ['HP%', '방%', '깡방', '깡체'],
+            'blue': ['깡체', '방%', '깡방', '효과 저항'],
+            'yellow': ['깡체', '방%', '깡방'],
             'green': ['효과 명중', '효과 저항']
         };
 
         let selectedColor = null;
         let selectedMainOption = null;
+        let customColorOptions = {}; // 사용자 정의 색상별 옵션
+
+        // 페이지 로드 시 저장된 설정 불러오기
+        async function loadCustomOptions() {
+            try {
+                const result = await window.storage.get('custom-color-options', true);
+                if (result && result.value) {
+                    customColorOptions = JSON.parse(result.value);
+                    console.log('커스텀 옵션 로드 완료:', customColorOptions);
+                }
+            } catch (error) {
+                console.log('저장된 설정 없음, 기본값 사용');
+                customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
+            }
+        }
+
+        // 커스텀 옵션 저장
+        async function saveCustomOptions() {
+            try {
+                await window.storage.set('custom-color-options', JSON.stringify(customColorOptions), true);
+                console.log('커스텀 옵션 저장 완료');
+            } catch (error) {
+                console.error('저장 실패:', error);
+            }
+        }
+
+        // 현재 색상별 좋은 옵션 가져오기
+        function getColorGoodOptions(color) {
+            if (customColorOptions[color]) {
+                return customColorOptions[color];
+            }
+            return defaultColorGoodOptions[color] || [];
+        }
 
         // 색상 선택 이벤트
         document.querySelectorAll('.color-badge').forEach(badge => {
@@ -454,6 +503,31 @@
             updateSubOptions();
         });
 
+        // 부옵션 클릭 이벤트 (토글)
+        function toggleOption(optionName) {
+            if (!selectedColor) return;
+
+            // 현재 색상의 커스텀 옵션 배열 가져오기
+            if (!customColorOptions[selectedColor]) {
+                customColorOptions[selectedColor] = [...defaultColorGoodOptions[selectedColor]];
+            }
+
+            const currentOptions = customColorOptions[selectedColor];
+            const index = currentOptions.indexOf(optionName);
+
+            if (index > -1) {
+                // 이미 있으면 제거 (좋은 옵션에서 제외)
+                currentOptions.splice(index, 1);
+            } else {
+                // 없으면 추가 (좋은 옵션으로 설정)
+                currentOptions.push(optionName);
+            }
+
+            // 저장 및 화면 업데이트
+            saveCustomOptions();
+            updateSubOptions();
+        }
+
         // 부옵션 표시 업데이트
         function updateSubOptions() {
             const display = document.getElementById('subOptionsDisplay');
@@ -469,23 +543,43 @@
             }
 
             const subOptions = mainOptionData[selectedMainOption];
-            const goodOptions = colorGoodOptions[selectedColor];
+            const goodOptions = getColorGoodOptions(selectedColor);
+            const validOptions = mainOptionValidOptions[selectedMainOption] || [];
 
             let html = '';
             subOptions.forEach(option => {
                 let cssClass = 'neutral';
                 
-                if (goodOptions.includes(option)) {
-                    cssClass = 'good';
+                // HP% 주옵션인 경우 유효옵션 체크
+                if (selectedMainOption === 'HP%' && validOptions.length > 0) {
+                    if (validOptions.includes(option)) {
+                        // 유효옵션 중에서 색상별로 좋은 옵션인지 확인
+                        if (goodOptions.includes(option)) {
+                            cssClass = 'good';
+                        } else {
+                            cssClass = 'neutral';
+                        }
+                    } else {
+                        // 유효옵션이 아니면 무조건 bad
+                        cssClass = 'bad';
+                    }
                 } else {
-                    cssClass = 'bad';
+                    // 다른 주옵션은 기존 로직
+                    if (goodOptions.includes(option)) {
+                        cssClass = 'good';
+                    } else {
+                        cssClass = 'bad';
+                    }
                 }
 
-                html += `<span class="sub-option-item ${cssClass}">${option}</span>`;
+                html += `<span class="sub-option-item ${cssClass}" onclick="toggleOption('${option}')">${option}</span>`;
             });
 
             display.innerHTML = html;
         }
+
+        // 페이지 로드 시 설정 불러오기
+        loadCustomOptions();
     </script>
 </body>
 </html>
