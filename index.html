@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>장비 옵션 테이블</title>
+    <title>전적 관리</title>
     <style>
         * {
             margin: 0;
@@ -14,30 +14,68 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: #f5f5f5;
-            padding: 40px 20px;
-            min-height: 100vh;
             color: #1a1a1a;
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 네비게이션 */
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #e8e8e8;
+            padding: 32px 0;
+        }
+
+        .logo {
+            padding: 0 24px 24px 24px;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #1a1a1a;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 16px;
+        }
+
+        .nav-item {
+            padding: 14px 24px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .nav-item:hover {
+            background: #f9f9f9;
+        }
+
+        .nav-item.active {
+            background: #1a1a1a;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* 메인 컨텐츠 */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
         }
 
         h1 {
-            text-align: center;
-            color: #1a1a1a;
-            margin-bottom: 40px;
             font-size: 2.2em;
             font-weight: 700;
+            margin-bottom: 40px;
             letter-spacing: -0.5px;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 24px;
-            margin-bottom: 30px;
         }
 
         .card {
@@ -46,144 +84,240 @@
             padding: 32px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             border: 1px solid #e8e8e8;
+            margin-bottom: 24px;
         }
 
         .card h2 {
-            color: #1a1a1a;
-            margin-bottom: 24px;
             font-size: 1.6em;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            margin-bottom: 24px;
             padding-bottom: 12px;
             border-bottom: 2px solid #1a1a1a;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        /* 폼 스타일 */
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        th {
-            background: #f9f9f9;
-            color: #333;
-            padding: 14px 18px;
-            text-align: left;
-            font-weight: 700;
-            font-size: 13px;
-            border-bottom: 2px solid #e0e0e0;
-            letter-spacing: 0.3px;
-        }
-
-        td {
-            padding: 16px 18px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 14.5px;
-            color: #2a2a2a;
-            line-height: 1.6;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tbody tr:hover {
-            background: #fafafa;
-        }
-
-        .equipment-name {
-            font-weight: 700;
-            font-size: 15px;
-            color: #1a1a1a;
-            min-width: 100px;
-        }
-
-        .color-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 6px;
+        .form-group label {
+            display: block;
             font-weight: 600;
-            font-size: 12.5px;
-            margin-right: 8px;
-            letter-spacing: -0.2px;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1a1a1a;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .monster-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .monster-input input {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .color-badge:hover {
+        .btn-primary {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #333;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-left: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        /* 전적 목록 */
+        .record-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .record-item {
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .record-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .record-id {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .record-date {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .monster-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .monster-badge {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .record-comment {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+        }
+
+        .record-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .search-box {
+            margin-bottom: 24px;
+        }
+
+        .search-box input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* 모듈 정리 전용 스타일 */
+        .module-color-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .module-color-badge:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
-        .color-badge.active {
+        .module-color-badge.active {
             box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
             transform: scale(1.05);
         }
 
-        .color-red { 
-            background: #fee; 
-            color: #c00; 
+        .module-color-red {
+            background: #fee;
+            color: #c00;
             border: 1px solid #fcc;
         }
-        .color-blue { 
-            background: #e3f2fd; 
-            color: #1565c0; 
+
+        .module-color-blue {
+            background: #e3f2fd;
+            color: #1565c0;
             border: 1px solid #bbdefb;
         }
-        .color-yellow { 
-            background: #fff9e6; 
-            color: #b8860b; 
+
+        .module-color-yellow {
+            background: #fff9e6;
+            color: #b8860b;
             border: 1px solid #ffe9a8;
         }
-        .color-green { 
-            background: #e8f5e9; 
-            color: #2e7d32; 
+
+        .module-color-green {
+            background: #e8f5e9;
+            color: #2e7d32;
             border: 1px solid #c8e6c9;
         }
 
-        .section-divider {
-            font-weight: 600;
-            color: #666;
-            margin: 0 6px;
-        }
-
-        /* 색상별 섹션 테이블 스타일 */
-        .color-section-table td:first-child {
-            font-weight: 600;
-        }
-
-        .color-section-table td {
-            text-align: center;
-            padding: 14px 12px;
-        }
-
-        .color-section-table td:first-child {
-            text-align: left;
-        }
-
-        .color-section-table th {
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .color-section-table th:first-child {
-            text-align: left;
-        }
-
-        /* 색상 선택 버튼 */
-        .color-selector {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .color-selector .color-badge {
-            padding: 8px 16px;
-            font-size: 14px;
-        }
-
-        /* 부옵션 상태 스타일 */
-        .sub-option-item {
+        .module-sub-option-item {
             display: inline-block;
             padding: 6px 14px;
             margin: 3px;
@@ -195,232 +329,497 @@
             user-select: none;
         }
 
-        .sub-option-item:hover {
+        .module-sub-option-item:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
 
-        .sub-option-item:active {
-            transform: translateY(0);
-        }
-
-        .sub-option-item.good {
+        .module-sub-option-item.good {
             background: #e8f5e9;
             color: #2e7d32;
             border: 1px solid #c8e6c9;
             font-weight: 600;
         }
 
-        .sub-option-item.bad {
+        .module-sub-option-item.bad {
             background: #ffebee;
             color: #c62828;
             border: 1px solid #ffcdd2;
             opacity: 0.7;
         }
-
-
-
-        /* 반응형 */
-        @media (max-width: 1200px) {
-            .grid-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* 주요 부옵션 스타일 */
-        .sub-options {
-            color: #555;
-            font-size: 13.5px;
-            letter-spacing: 0.2px;
-        }
-
-        /* 옵션 분석기 스타일 */
-        .option-analyzer {
-            margin-top: 24px;
-        }
-
-        .main-option-select {
-            margin-bottom: 20px;
-        }
-
-        .main-option-select label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1a1a1a;
-        }
-
-        .main-option-select select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
-            background: white;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        .main-option-select select:focus {
-            outline: none;
-            border-color: #1a1a1a;
-        }
-
-        .sub-options-display {
-            line-height: 2;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>가방 쿠와앙</h1>
-        
-        <div class="grid-layout">
-            <!-- 장비 옵션 (좌측, 넓게) -->
-            <div class="card">
-                <h2>장비 옵션</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 110px;">장비</th>
-                            <th style="width: 200px;">주요 부옵션</th>
-                            <th>판매 옵션 (색상별)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="equipment-name">마스크</td>
-                            <td class="sub-options">치확 / 치피 / 공% / 속도<br>효명 / 깡방 / 깡체</td>
-                            <td>
-                                <span class="color-badge color-red">빨강</span> 깡방/깡체
-                                <span class="section-divider">|</span>
-                                <span class="color-badge color-blue">파랑</span> 깡방/깡체/속X
-                                <span class="section-divider">|</span>
-                                <span class="color-badge color-yellow">노랑</span> 공%
-                                <span class="section-divider">|</span>
-                                <span class="color-badge color-green">초록</span> 깡공
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="equipment-name">트랜지스터</td>
-                            <td class="sub-options">치확 / 치피 / 속도 / 체%<br>깡방 / 효저 / 깡공</td>
-                            <td>
-                                <span class="color-badge color-red">빨강</span> 효저/깡방
-                                <span class="section-divider">|</span>
-                                <span class="color-badge color-blue">파랑</span> 효저/깡공/속X
-                                <span class="section-divider">|</span>
-                                <span class="color-badge color-yellow">노랑</span> 깡공
-                                <span class="section-divider">|</span>
-                                <span class="color-badge color-green">초록</span> 깡공/치피
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="equipment-name">리스트</td>
-                            <td class="sub-options">치확 / 치피 / 속도 / 방%<br>깡체 / 효저 / 깡공</td>
-                            <td>
-                                <span class="color-badge color-red">빨강</span> 효저/깡공
-                                <span class="section-divider">|</span>
-                                <span class="color-badge color-blue">파랑</span> 효저/깡공/속X
-                                <span class="section-divider">|</span>
-                                <span class="color-badge color-yellow">노랑</span> 깡공
-                                <span class="section-divider">|</span>
-                                <span class="color-badge color-green">초록</span> 깡공
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- 색상별 섹션 (우측 상단) -->
-            <div class="card">
-                <h2>색상별 섹션</h2>
-                <table class="color-section-table">
-                    <thead>
-                        <tr>
-                            <th>색상</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="color-badge color-red">빨강</span></td>
-                            <td>공세</td>
-                            <td>처단</td>
-                            <td>광폭</td>
-                            <td>기세<br>추격</td>
-                        </tr>
-                        <tr>
-                            <td><span class="color-badge color-blue">파랑</span></td>
-                            <td>질주</td>
-                            <td>수호</td>
-                            <td>진격</td>
-                            <td>시공<br>지배</td>
-                        </tr>
-                        <tr>
-                            <td><span class="color-badge color-yellow">노랑</span></td>
-                            <td>강철</td>
-                            <td>악기</td>
-                            <td>유혈</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td><span class="color-badge color-green">초록</span></td>
-                            <td>원천</td>
-                            <td>치유</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <!-- 사이드바 네비게이션 -->
+        <div class="sidebar">
+            <div class="logo">가방 쿠와앙</div>
+            <div class="nav-item" onclick="showPage('module')">모듈 정리</div>
+            <div class="nav-item active" onclick="showPage('search')">전적 검색</div>
+            <div class="nav-item" onclick="showPage('register')">전적 등록</div>
         </div>
 
-        <!-- 오른쪽 모듈 (장비 옵션 아래) -->
-        <div class="card">
-            <h2>오른쪽 모듈</h2>
-            
-            <div class="color-selector">
-                <span class="color-badge color-red" data-color="red">빨강</span>
-                <span class="color-badge color-blue" data-color="blue">파랑</span>
-                <span class="color-badge color-yellow" data-color="yellow">노랑</span>
-                <span class="color-badge color-green" data-color="green">초록</span>
-            </div>
+        <!-- 메인 컨텐츠 -->
+        <div class="main-content">
+            <!-- 모듈 정리 페이지 -->
+            <div id="module-page" class="page">
+                <h1>가방 쿠와앙</h1>
+                
+                <div style="display: grid; grid-template-columns: 1fr 380px; gap: 24px; margin-bottom: 30px;">
+                    <!-- 장비 옵션 -->
+                    <div class="card">
+                        <h2>장비 옵션</h2>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="background: #f9f9f9; padding: 14px 18px; text-align: left; font-weight: 700; font-size: 13px; border-bottom: 2px solid #e0e0e0; width: 100px;">장비</th>
+                                    <th style="background: #f9f9f9; padding: 14px 18px; text-align: left; font-weight: 700; font-size: 13px; border-bottom: 2px solid #e0e0e0; width: 180px;">주요 부옵션</th>
+                                    <th style="background: #f9f9f9; padding: 14px 18px; text-align: left; font-weight: 700; font-size: 13px; border-bottom: 2px solid #e0e0e0;">판매 옵션 (색상별)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="cursor: pointer;">
+                                    <td style="padding: 16px 18px; border-bottom: 1px solid #f0f0f0; font-weight: 700; font-size: 15px;">마스크</td>
+                                    <td style="padding: 16px 18px; border-bottom: 1px solid #f0f0f0; color: #555; font-size: 13.5px;">치확 / 치피 / 공% / 속도<br>효명 / 깡방 / 깡체</td>
+                                    <td style="padding: 16px 18px; border-bottom: 1px solid #f0f0f0; font-size: 14.5px;">
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #fee; color: #c00; border: 1px solid #fcc;">빨강</span> 깡방/깡체
+                                        <span style="font-weight: 600; color: #666; margin: 0 6px;">|</span>
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb;">파랑</span> 깡방/깡체/속X
+                                        <span style="font-weight: 600; color: #666; margin: 0 6px;">|</span>
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #fff9e6; color: #b8860b; border: 1px solid #ffe9a8;">노랑</span> 공%
+                                        <span style="font-weight: 600; color: #666; margin: 0 6px;">|</span>
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;">초록</span> 깡공
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 16px 18px; border-bottom: 1px solid #f0f0f0; font-weight: 700; font-size: 15px;">트랜지스터</td>
+                                    <td style="padding: 16px 18px; border-bottom: 1px solid #f0f0f0; color: #555; font-size: 13.5px;">치확 / 치피 / 속도 / 체%<br>깡방 / 효저 / 깡공</td>
+                                    <td style="padding: 16px 18px; border-bottom: 1px solid #f0f0f0; font-size: 14.5px;">
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #fee; color: #c00; border: 1px solid #fcc;">빨강</span> 효저/깡방
+                                        <span style="font-weight: 600; color: #666; margin: 0 6px;">|</span>
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb;">파랑</span> 효저/깡공/속X
+                                        <span style="font-weight: 600; color: #666; margin: 0 6px;">|</span>
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #fff9e6; color: #b8860b; border: 1px solid #ffe9a8;">노랑</span> 깡공
+                                        <span style="font-weight: 600; color: #666; margin: 0 6px;">|</span>
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;">초록</span> 깡공/치피
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 16px 18px; font-weight: 700; font-size: 15px;">리스트</td>
+                                    <td style="padding: 16px 18px; color: #555; font-size: 13.5px;">치확 / 치피 / 속도 / 방%<br>깡체 / 효저 / 깡공</td>
+                                    <td style="padding: 16px 18px; font-size: 14.5px;">
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #fee; color: #c00; border: 1px solid #fcc;">빨강</span> 효저/깡공
+                                        <span style="font-weight: 600; color: #666; margin: 0 6px;">|</span>
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb;">파랑</span> 효저/깡공/속X
+                                        <span style="font-weight: 600; color: #666; margin: 0 6px;">|</span>
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #fff9e6; color: #b8860b; border: 1px solid #ffe9a8;">노랑</span> 깡공
+                                        <span style="font-weight: 600; color: #666; margin: 0 6px;">|</span>
+                                        <span style="display: inline-block; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 12.5px; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;">초록</span> 깡공
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-            <div class="option-analyzer">
-                <div class="main-option-select">
-                    <label>주 옵션 선택</label>
-                    <select id="mainOptionSelect">
-                        <option value="">선택하세요</option>
-                        <option value="HP%">HP%</option>
-                        <option value="치명타 확률">치명타 확률</option>
-                        <option value="치명타 피해">치명타 피해</option>
-                        <option value="공%">공%</option>
-                        <option value="방%">방%</option>
-                        <option value="효과 명중">효과 명중</option>
-                        <option value="효과 저항">효과 저항</option>
-                        <option value="깡체">깡체</option>
-                    </select>
+                    <!-- 색상별 섹션 -->
+                    <div class="card">
+                        <h2>색상별 섹션</h2>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="background: #f9f9f9; padding: 12px 10px; text-align: left; font-weight: 700; font-size: 12px; border-bottom: 2px solid #e0e0e0;">색상</th>
+                                    <th style="background: #f9f9f9; padding: 12px 10px; text-align: center; font-weight: 700; font-size: 12px; border-bottom: 2px solid #e0e0e0;"></th>
+                                    <th style="background: #f9f9f9; padding: 12px 10px; text-align: center; font-weight: 700; font-size: 12px; border-bottom: 2px solid #e0e0e0;"></th>
+                                    <th style="background: #f9f9f9; padding: 12px 10px; text-align: center; font-weight: 700; font-size: 12px; border-bottom: 2px solid #e0e0e0;"></th>
+                                    <th style="background: #f9f9f9; padding: 12px 10px; text-align: center; font-weight: 700; font-size: 12px; border-bottom: 2px solid #e0e0e0;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; font-weight: 600;">
+                                        <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; background: #fee; color: #c00; border: 1px solid #fcc;">빨강</span>
+                                    </td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">공세</td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">처단</td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">광폭</td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">기세<br>추격</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; font-weight: 600;">
+                                        <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb;">파랑</span>
+                                    </td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">질주</td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">수호</td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">진격</td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">시공<br>지배</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; font-weight: 600;">
+                                        <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; background: #fff9e6; color: #b8860b; border: 1px solid #ffe9a8;">노랑</span>
+                                    </td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">강철</td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">악기</td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">유혈</td>
+                                    <td style="padding: 12px 10px; border-bottom: 1px solid #f0f0f0; text-align: center; font-size: 13px;">-</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 10px; font-weight: 600;">
+                                        <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;">초록</span>
+                                    </td>
+                                    <td style="padding: 12px 10px; text-align: center; font-size: 13px;">원천</td>
+                                    <td style="padding: 12px 10px; text-align: center; font-size: 13px;">치유</td>
+                                    <td style="padding: 12px 10px; text-align: center; font-size: 13px;">-</td>
+                                    <td style="padding: 12px 10px; text-align: center; font-size: 13px;">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="sub-options-display" id="subOptionsDisplay">
-                    색상과 주 옵션을 선택하세요
+                <!-- 오른쪽 모듈 -->
+                <div class="card">
+                    <h2>오른쪽 모듈</h2>
+                    
+                    <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+                        <span class="module-color-badge module-color-red" data-color="red" onclick="selectModuleColor('red')">빨강</span>
+                        <span class="module-color-badge module-color-blue" data-color="blue" onclick="selectModuleColor('blue')">파랑</span>
+                        <span class="module-color-badge module-color-yellow" data-color="yellow" onclick="selectModuleColor('yellow')">노랑</span>
+                        <span class="module-color-badge module-color-green" data-color="green" onclick="selectModuleColor('green')">초록</span>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1a1a1a;">주 옵션 선택</label>
+                        <select id="moduleMainOption" onchange="updateModuleSubOptions()" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; background: white; cursor: pointer;">
+                            <option value="">선택하세요</option>
+                            <option value="HP%">HP%</option>
+                            <option value="치명타 확률">치명타 확률</option>
+                            <option value="치명타 피해">치명타 피해</option>
+                            <option value="공%">공%</option>
+                            <option value="방%">방%</option>
+                            <option value="효과 명중">효과 명중</option>
+                            <option value="효과 저항">효과 저항</option>
+                            <option value="깡체">깡체</option>
+                        </select>
+                    </div>
+
+                    <div id="moduleSubOptions" style="line-height: 2;">
+                        색상과 주 옵션을 선택하세요
+                    </div>
+                </div>
+            </div>
+
+            <!-- 전적 검색 페이지 -->
+            <div id="search-page" class="page active">
+                <h1>전적 검색</h1>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="아이디 검색..." onkeyup="searchRecords()">
+                </div>
+
+                <div class="card">
+                    <h2>등록된 전적</h2>
+                    <div id="recordList" class="record-list"></div>
+                </div>
+            </div>
+
+            <!-- 전적 등록 페이지 -->
+            <div id="register-page" class="page">
+                <h1 id="formTitle">전적 등록</h1>
+                
+                <div class="card">
+                    <h2>기본 정보</h2>
+                    
+                    <div class="form-group">
+                        <label>아이디</label>
+                        <input type="text" id="userId" placeholder="아이디 입력">
+                    </div>
+
+                    <div class="form-group">
+                        <label>몬스터 (최대 5개)</label>
+                        <div id="monsterInputs">
+                            <div class="monster-input">
+                                <input type="text" placeholder="몬스터 1" data-index="0">
+                            </div>
+                            <div class="monster-input">
+                                <input type="text" placeholder="몬스터 2" data-index="1">
+                            </div>
+                            <div class="monster-input">
+                                <input type="text" placeholder="몬스터 3" data-index="2">
+                            </div>
+                            <div class="monster-input">
+                                <input type="text" placeholder="몬스터 4" data-index="3">
+                            </div>
+                            <div class="monster-input">
+                                <input type="text" placeholder="몬스터 5" data-index="4">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>코멘트</label>
+                        <textarea id="comment" placeholder="코멘트 입력 (선택사항)"></textarea>
+                    </div>
+
+                    <div>
+                        <button class="btn btn-primary" onclick="saveRecord()">등록</button>
+                        <button class="btn btn-secondary" onclick="cancelEdit()">취소</button>
+                    </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 
     <script>
-        // JSONBin.io 설정
-        const JSONBIN_BIN_ID = '6922f96aae596e708f6b9402';
         const JSONBIN_API_KEY = '$2a$10$zDafvaVaEGF1Ybm2gCeEE.ZxR17ccQ4WYGDxm6W/5WDj1c8lL//Nq';
-        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+        const RECORDS_BIN_ID = '6926ad72ae596e708f71a262';
+        const RECORDS_URL = `https://api.jsonbin.io/v3/b/${RECORDS_BIN_ID}`;
 
-        // 주 옵션별 부옵션 데이터
+        let records = [];
+        let editingId = null;
+        let pollInterval = null;
+
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            if (page === 'module') {
+                document.getElementById('module-page').classList.add('active');
+                document.querySelectorAll('.nav-item')[0].classList.add('active');
+            } else if (page === 'search') {
+                document.getElementById('search-page').classList.add('active');
+                document.querySelectorAll('.nav-item')[1].classList.add('active');
+                loadRecords();
+            } else if (page === 'register') {
+                document.getElementById('register-page').classList.add('active');
+                document.querySelectorAll('.nav-item')[2].classList.add('active');
+            }
+        }
+
+        async function loadRecords() {
+            try {
+                const response = await fetch(`${RECORDS_URL}/latest`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY
+                    }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    records = result.record || [];
+                    localStorage.setItem('game-records', JSON.stringify(records));
+                } else {
+                    const savedData = localStorage.getItem('game-records');
+                    records = savedData ? JSON.parse(savedData) : [];
+                }
+            } catch (error) {
+                const savedData = localStorage.getItem('game-records');
+                records = savedData ? JSON.parse(savedData) : [];
+            }
+            displayRecords(records);
+        }
+
+        async function saveRecordsToServer() {
+            try {
+                const response = await fetch(RECORDS_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify(records)
+                });
+
+                if (response.ok) {
+                    localStorage.setItem('game-records', JSON.stringify(records));
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('저장 실패:', error);
+                return false;
+            }
+        }
+
+        function startPolling() {
+            if (pollInterval) clearInterval(pollInterval);
+            
+            pollInterval = setInterval(async () => {
+                const currentPage = document.querySelector('.page.active').id;
+                if (currentPage === 'search-page') {
+                    try {
+                        const response = await fetch(`${RECORDS_URL}/latest`, {
+                            method: 'GET',
+                            headers: {
+                                'X-Master-Key': JSONBIN_API_KEY
+                            }
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            const newRecords = result.record || [];
+                            
+                            if (JSON.stringify(newRecords) !== JSON.stringify(records)) {
+                                records = newRecords;
+                                displayRecords(records);
+                                localStorage.setItem('game-records', JSON.stringify(records));
+                            }
+                        }
+                    } catch (error) {
+                        // 네트워크 에러 무시
+                    }
+                }
+            }, 10000);
+        }
+
+        function displayRecords(recordsToShow) {
+            const container = document.getElementById('recordList');
+            
+            if (recordsToShow.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>등록된 전적이 없습니다</p></div>';
+                return;
+            }
+
+            recordsToShow.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = recordsToShow.map(record => `
+                <div class="record-item">
+                    <div class="record-header">
+                        <div class="record-id">${record.userId}</div>
+                        <div class="record-date">${formatDate(record.date)}</div>
+                    </div>
+                    <div class="monster-list">
+                        ${record.monsters.filter(m => m).map(monster => 
+                            `<span class="monster-badge">${monster}</span>`
+                        ).join('')}
+                    </div>
+                    ${record.comment ? `<div class="record-comment">${record.comment}</div>` : ''}
+                    <div class="record-actions">
+                        <button class="btn btn-primary btn-small" onclick="editRecord('${record.id}')">수정</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteRecord('${record.id}')">삭제</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+
+        function searchRecords() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = records.filter(record => 
+                record.userId.toLowerCase().includes(query)
+            );
+            displayRecords(filtered);
+        }
+
+        function saveRecord() {
+            const userId = document.getElementById('userId').value.trim();
+            if (!userId) {
+                alert('아이디를 입력해주세요');
+                return;
+            }
+
+            const monsterInputs = document.querySelectorAll('#monsterInputs input');
+            const monsters = Array.from(monsterInputs).map(input => input.value.trim());
+            
+            if (monsters.filter(m => m).length === 0) {
+                alert('최소 1개의 몬스터를 입력해주세요');
+                return;
+            }
+
+            const comment = document.getElementById('comment').value.trim();
+
+            const record = {
+                id: editingId || Date.now().toString(),
+                userId: userId,
+                monsters: monsters,
+                comment: comment,
+                date: new Date().toISOString()
+            };
+
+            if (editingId) {
+                const index = records.findIndex(r => r.id === editingId);
+                records[index] = record;
+            } else {
+                records.push(record);
+            }
+
+            saveRecordsToServer().then(success => {
+                if (success) {
+                    clearForm();
+                    showPage('search');
+                    alert(editingId ? '수정되었습니다' : '등록되었습니다');
+                    editingId = null;
+                } else {
+                    alert('저장에 실패했습니다');
+                }
+            });
+        }
+
+        function deleteRecord(id) {
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            
+            records = records.filter(r => r.id !== id);
+            
+            saveRecordsToServer().then(success => {
+                if (success) {
+                    displayRecords(records);
+                    alert('삭제되었습니다');
+                } else {
+                    alert('삭제에 실패했습니다');
+                }
+            });
+        }
+
+        function editRecord(id) {
+            const record = records.find(r => r.id === id);
+            if (!record) return;
+
+            editingId = id;
+            document.getElementById('formTitle').textContent = '전적 수정';
+            document.getElementById('userId').value = record.userId;
+            
+            const monsterInputs = document.querySelectorAll('#monsterInputs input');
+            monsterInputs.forEach((input, index) => {
+                input.value = record.monsters[index] || '';
+            });
+            
+            document.getElementById('comment').value = record.comment || '';
+            
+            showPage('register');
+        }
+
+        function cancelEdit() {
+            clearForm();
+            showPage('search');
+        }
+
+        function clearForm() {
+            editingId = null;
+            document.getElementById('formTitle').textContent = '전적 등록';
+            document.getElementById('userId').value = '';
+            document.querySelectorAll('#monsterInputs input').forEach(input => {
+                input.value = '';
+            });
+            document.getElementById('comment').value = '';
+        }
+
+        loadRecords().then(() => {
+            startPolling();
+        });
+
+        // 모듈 정리 기능
+        const MODULE_BIN_ID = '6922f96aae596e708f6b9402';
+        const MODULE_URL = `https://api.jsonbin.io/v3/b/${MODULE_BIN_ID}`;
+
         const mainOptionData = {
             'HP%': ['깡체', '공%', '깡공', '방%', '깡방', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속'],
             '치명타 확률': ['HP%', '깡체', '공%', '깡공', '방%', '깡방', '치명타 피해', '효과 명중', '효과 저항', '공속'],
@@ -432,12 +831,6 @@
             '깡체': ['HP%', '공%', '깡공', '방%', '깡방', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속']
         };
 
-        // 주 옵션별 유효 옵션 정의 (색상 무관) - 사용 안 함
-        // const mainOptionValidOptions = {
-        //     'HP%': ['깡체', '치명타 확률', '치명타 피해', '효과 명중', '효과 저항', '공속', '방%']
-        // };
-
-        // 색상별 좋은 옵션 정의 (기본값)
         const defaultColorGoodOptions = {
             'red': {
                 'HP%': ['치명타 확률', '치명타 피해', '공속'],
@@ -481,15 +874,13 @@
             }
         };
 
-        let selectedColor = null;
-        let selectedMainOption = null;
-        let customColorOptions = {}; // 사용자 정의 색상별 옵션
-        let pollInterval = null; // 폴링 인터벌
+        let moduleCustomOptions = {};
+        let moduleSelectedColor = null;
+        let moduleSelectedMainOption = null;
 
-        // 페이지 로드 시 저장된 설정 불러오기
-        async function loadCustomOptions() {
+        async function loadModuleOptions() {
             try {
-                const response = await fetch(`${JSONBIN_URL}/latest`, {
+                const response = await fetch(`${MODULE_URL}/latest`, {
                     method: 'GET',
                     headers: {
                         'X-Master-Key': JSONBIN_API_KEY
@@ -498,130 +889,98 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    customColorOptions = result.record;
-                    localStorage.setItem('custom-color-options', JSON.stringify(customColorOptions));
+                    moduleCustomOptions = result.record;
+                    localStorage.setItem('custom-color-options', JSON.stringify(moduleCustomOptions));
                 } else {
                     const savedData = localStorage.getItem('custom-color-options');
-                    if (savedData) {
-                        customColorOptions = JSON.parse(savedData);
-                    } else {
-                        customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
-                    }
+                    moduleCustomOptions = savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(defaultColorGoodOptions));
                 }
             } catch (error) {
                 const savedData = localStorage.getItem('custom-color-options');
-                if (savedData) {
-                    customColorOptions = JSON.parse(savedData);
-                } else {
-                    customColorOptions = JSON.parse(JSON.stringify(defaultColorGoodOptions));
-                }
+                moduleCustomOptions = savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(defaultColorGoodOptions));
             }
-            updateSubOptions();
         }
 
-        // 주기적으로 변경사항 확인
-        function startPolling() {
-            if (pollInterval) clearInterval(pollInterval);
-            
-            pollInterval = setInterval(async () => {
-                try {
-                    const response = await fetch(`${JSONBIN_URL}/latest`, {
-                        method: 'GET',
-                        headers: {
-                            'X-Master-Key': JSONBIN_API_KEY
-                        }
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        const newOptions = result.record;
-                        
-                        if (JSON.stringify(newOptions) !== JSON.stringify(customColorOptions)) {
-                            customColorOptions = newOptions;
-                            updateSubOptions();
-                            localStorage.setItem('custom-color-options', JSON.stringify(customColorOptions));
-                        }
-                    }
-                } catch (error) {
-                    // 네트워크 에러 무시
-                }
-            }, 10000);
-        }
-
-        // 커스텀 옵션 저장
-        async function saveCustomOptions() {
+        async function saveModuleOptions() {
             try {
-                const response = await fetch(JSONBIN_URL, {
+                const response = await fetch(MODULE_URL, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Master-Key': JSONBIN_API_KEY
                     },
-                    body: JSON.stringify(customColorOptions)
+                    body: JSON.stringify(moduleCustomOptions)
                 });
 
                 if (response.ok) {
-                    localStorage.setItem('custom-color-options', JSON.stringify(customColorOptions));
+                    localStorage.setItem('custom-color-options', JSON.stringify(moduleCustomOptions));
                     return true;
                 }
                 return false;
             } catch (error) {
-                console.error('저장 실패:', error);
                 return false;
             }
         }
 
-        // 현재 색상별 좋은 옵션 가져오기
-        function getColorGoodOptions(color) {
-            if (customColorOptions[color] && customColorOptions[color][selectedMainOption]) {
-                return customColorOptions[color][selectedMainOption];
+        function selectModuleColor(color) {
+            moduleSelectedColor = color;
+            document.querySelectorAll('.module-color-badge').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.module-color-badge[data-color="${color}"]`).classList.add('active');
+            updateModuleSubOptions();
+        }
+
+        function updateModuleSubOptions() {
+            const display = document.getElementById('moduleSubOptions');
+            moduleSelectedMainOption = document.getElementById('moduleMainOption').value;
+            
+            if (!moduleSelectedColor) {
+                display.innerHTML = '색상을 선택하세요';
+                return;
             }
-            if (defaultColorGoodOptions[color] && defaultColorGoodOptions[color][selectedMainOption]) {
-                return defaultColorGoodOptions[color][selectedMainOption];
+            
+            if (!moduleSelectedMainOption) {
+                display.innerHTML = '주 옵션을 선택하세요';
+                return;
+            }
+
+            const subOptions = mainOptionData[moduleSelectedMainOption];
+            const goodOptions = getModuleColorGoodOptions(moduleSelectedColor);
+            let html = '';
+            
+            subOptions.forEach(option => {
+                const cssClass = goodOptions.includes(option) ? 'good' : 'bad';
+                html += `<span class="module-sub-option-item ${cssClass}" onclick="toggleModuleOption('${option}')">${option}</span>`;
+            });
+
+            display.innerHTML = html;
+        }
+
+        function getModuleColorGoodOptions(color) {
+            if (moduleCustomOptions[color] && moduleCustomOptions[color][moduleSelectedMainOption]) {
+                return moduleCustomOptions[color][moduleSelectedMainOption];
+            }
+            if (defaultColorGoodOptions[color] && defaultColorGoodOptions[color][moduleSelectedMainOption]) {
+                return defaultColorGoodOptions[color][moduleSelectedMainOption];
             }
             return [];
         }
 
-        // 색상 선택 이벤트
-        document.querySelectorAll('.color-badge').forEach(badge => {
-            badge.addEventListener('click', function() {
-                const color = this.getAttribute('data-color');
-                if (!color) return;
+        function toggleModuleOption(optionName) {
+            if (!moduleSelectedColor || !moduleSelectedMainOption) return;
 
-                // 활성화 상태 토글
-                document.querySelectorAll('.color-badge[data-color]').forEach(b => {
-                    b.classList.remove('active');
-                });
-                this.classList.add('active');
-                
-                selectedColor = color;
-                updateSubOptions();
-            });
-        });
-
-        // 주 옵션 선택 이벤트
-        document.getElementById('mainOptionSelect').addEventListener('change', function() {
-            selectedMainOption = this.value;
-            updateSubOptions();
-        });
-
-        // 부옵션 클릭 이벤트
-        function toggleOption(optionName) {
-            if (!selectedColor || !selectedMainOption) return;
-
-            if (!customColorOptions[selectedColor]) {
-                customColorOptions[selectedColor] = {};
+            if (!moduleCustomOptions[moduleSelectedColor]) {
+                moduleCustomOptions[moduleSelectedColor] = {};
             }
             
-            if (!customColorOptions[selectedColor][selectedMainOption]) {
-                if (defaultColorGoodOptions[selectedColor] && defaultColorGoodOptions[selectedColor][selectedMainOption]) {
-                    customColorOptions[selectedColor][selectedMainOption] = [...defaultColorGoodOptions[selectedColor][selectedMainOption]];
+            if (!moduleCustomOptions[moduleSelectedColor][moduleSelectedMainOption]) {
+                if (defaultColorGoodOptions[moduleSelectedColor] && defaultColorGoodOptions[moduleSelectedColor][moduleSelectedMainOption]) {
+                    moduleCustomOptions[moduleSelectedColor][moduleSelectedMainOption] = [...defaultColorGoodOptions[moduleSelectedColor][moduleSelectedMainOption]];
                 } else {
-                    customColorOptions[selectedColor][selectedMainOption] = [];
+                    moduleCustomOptions[moduleSelectedColor][moduleSelectedMainOption] = [];
                 }
             }
 
-            const currentOptions = customColorOptions[selectedColor][selectedMainOption];
+            const currentOptions = moduleCustomOptions[moduleSelectedColor][moduleSelectedMainOption];
             const index = currentOptions.indexOf(optionName);
 
             if (index > -1) {
@@ -630,39 +989,11 @@
                 currentOptions.push(optionName);
             }
 
-            updateSubOptions();
-            saveCustomOptions();
+            updateModuleSubOptions();
+            saveModuleOptions();
         }
 
-        // 부옵션 표시 업데이트
-        function updateSubOptions() {
-            const display = document.getElementById('subOptionsDisplay');
-            
-            if (!selectedColor) {
-                display.innerHTML = '색상을 선택하세요';
-                return;
-            }
-            
-            if (!selectedMainOption) {
-                display.innerHTML = '주 옵션을 선택하세요';
-                return;
-            }
-
-            const subOptions = mainOptionData[selectedMainOption];
-            const goodOptions = getColorGoodOptions(selectedColor);
-            let html = '';
-            
-            subOptions.forEach(option => {
-                const cssClass = goodOptions.includes(option) ? 'good' : 'bad';
-                html += `<span class="sub-option-item ${cssClass}" onclick="toggleOption('${option}')">${option}</span>`;
-            });
-
-            display.innerHTML = html;
-        }
-
-        loadCustomOptions().then(() => {
-            startPolling();
-        });
+        loadModuleOptions();
     </script>
 </body>
 </html>
